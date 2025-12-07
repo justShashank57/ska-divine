@@ -1,5 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import skaIntroVideo from './assets/skaIntro.mp4'
+import amenity1 from './assets/amenities/1.png'
+import amenity2 from './assets/amenities/2.png'
+import amenity3 from './assets/amenities/3.png'
+import amenity4 from './assets/amenities/4.png'
+import amenity5 from './assets/amenities/5.png'
+import amenity6 from './assets/amenities/6.png'
+import amenity7 from './assets/amenities/7.png'
+import amenity8 from './assets/amenities/8.png'
 
 function App() {
   const [formData, setFormData] = useState({
@@ -21,6 +29,7 @@ function App() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
+  const [showFloorPlans, setShowFloorPlans] = useState(true)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
   const videoRef = useRef<HTMLVideoElement>(null)
   const carouselVideoRefs = useRef<(HTMLVideoElement | null)[]>([])
@@ -317,25 +326,25 @@ function App() {
           <p className="font-body text-lg md:text-2xl mb-12 opacity-95 italic text-soft-gold-glow">Luxury Living Redefined in the Heart of the City</p>
           <div className="grid grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 md:gap-8 mb-12 p-6 md:p-10 bg-royal-purple/75 backdrop-blur-[20px] rounded-2xl border-2 border-gold/50 shadow-[0_8px_32px_rgba(0,0,0,0.5),0_0_20px_rgba(212,175,55,0.4)]">
             <div className="flex flex-col gap-2">
-              <span className="text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">Price Range</span>
-              <span className="text-xl font-semibold text-gold font-heading">₹1.2 Cr - ₹2.5 Cr</span>
+              <span className="text-xs md:text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">Price Range</span>
+              <span className="text-base md:text-lg lg:text-xl font-semibold text-gold font-heading">₹1.2 Cr - ₹2.5 Cr</span>
             </div>
             <div className="flex flex-col gap-2">
-              <span className="text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">Location</span>
-              <span className="text-xl font-semibold text-gold font-heading">Prime Downtown</span>
+              <span className="text-xs md:text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">Location</span>
+              <span className="text-base md:text-lg lg:text-xl font-semibold text-gold font-heading">Prime Downtown</span>
             </div>
             <div className="flex flex-col gap-2">
-              <span className="text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">RERA</span>
-              <span className="text-xl font-semibold text-gold font-heading">RERA Approved</span>
+              <span className="text-xs md:text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">RERA</span>
+              <span className="text-base md:text-lg lg:text-xl font-semibold text-gold font-heading">RERA Approved</span>
             </div>
             <div className="flex flex-col gap-2">
-              <span className="text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">Possession</span>
-              <span className="text-xl font-semibold text-gold font-heading">Q2 2025</span>
+              <span className="text-xs md:text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">Possession</span>
+              <span className="text-base md:text-lg lg:text-xl font-semibold text-gold font-heading">Q2 2025</span>
             </div>
           </div>
           <div className="flex gap-6 justify-center flex-wrap">
-            <button className="px-10 py-3.5 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-base cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)]" onClick={() => openModal('brochure')}>Download Brochure</button>
-            <button className="px-10 py-3.5 bg-transparent text-gold border-2 border-gold rounded-lg font-heading font-semibold text-base cursor-pointer transition-all duration-300 tracking-wide hover:bg-gold hover:text-royal-purple hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]" onClick={scrollToContact}>Book Site Visit</button>
+            <button className="px-8 md:px-10 py-2.5 md:py-3.5 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-sm md:text-base cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)]" onClick={() => openModal('brochure')}>Download Brochure</button>
+            <button className="px-8 md:px-10 py-2.5 md:py-3.5 bg-transparent text-gold border-2 border-gold rounded-lg font-heading font-semibold text-sm md:text-base cursor-pointer transition-all duration-300 tracking-wide hover:bg-gold hover:text-royal-purple hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]" onClick={scrollToContact}>Book Site Visit</button>
           </div>
         </div>
       </section>
@@ -354,9 +363,9 @@ function App() {
               { icon: '📅', title: 'Early Possession', desc: 'Ready to move in by Q2 2025' },
             ].map((item, idx) => (
               <div key={idx} className="bg-white p-10 rounded-xl text-center shadow-[0_4px_20px_rgba(46,26,71,0.15)] transition-all duration-300 border border-gold/30 relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-1 before:bg-gradient-to-r before:from-gold before:to-soft-gold-glow before:rounded-t-xl hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_20px_rgba(212,175,55,0.2)] hover:border-gold">
-                <div className="text-5xl mb-4 drop-shadow-[0_2px_4px_rgba(212,175,55,0.3)]">{item.icon}</div>
-                <h3 className="font-heading text-xl mb-3 text-royal-purple">{item.title}</h3>
-                <p className="text-text-light text-base leading-relaxed">{item.desc}</p>
+                <div className="text-4xl md:text-5xl mb-4 drop-shadow-[0_2px_4px_rgba(212,175,55,0.3)]">{item.icon}</div>
+                <h3 className="font-heading text-lg md:text-xl mb-3 text-royal-purple">{item.title}</h3>
+                <p className="text-text-light text-sm md:text-base leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -366,11 +375,11 @@ function App() {
       {/* Gallery Section */}
       <section id="gallery" className="bg-gradient-to-b from-white to-cream py-16 md:py-24" ref={(el) => { sectionsRef.current[2] = el }}>
         <div className="max-w-6xl mx-auto px-8">
-          <h2 className="font-heading text-5xl font-semibold text-center mb-16 text-royal-purple tracking-wide relative pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Gallery</h2>
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Gallery</h2>
           <div className="max-w-4xl mx-auto relative">
             <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-gold shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_30px_rgba(212,175,55,0.3)] bg-royal-purple">
               <button 
-                className="absolute top-1/2 left-4 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-royal-purple/80 border-2 border-gold text-gold text-3xl font-bold cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-sm hover:bg-gold hover:text-royal-purple hover:scale-110 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]" 
+                className="absolute top-1/2 left-2 md:left-4 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-royal-purple/80 border-2 border-gold text-gold text-2xl md:text-3xl font-bold cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-sm hover:bg-gold hover:text-royal-purple hover:scale-110 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]" 
                 onClick={prevSlide} 
                 aria-label="Previous slide"
               >
@@ -415,7 +424,7 @@ function App() {
                             if (placeholder) placeholder.style.display = 'flex'
                           }}
                         />
-                        <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${item.placeholder === 'interior' ? 'from-deep-purple to-[#5A3C7A]' : 'from-[#1a0f2e] to-deep-purple'} text-gold text-2xl font-semibold font-heading text-center relative overflow-hidden`} style={{ display: 'none' }}>
+                        <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${item.placeholder === 'interior' ? 'from-deep-purple to-[#5A3C7A]' : 'from-[#1a0f2e] to-deep-purple'} text-gold text-lg md:text-xl lg:text-2xl font-semibold font-heading text-center relative overflow-hidden`} style={{ display: 'none' }}>
                           {item.title}
                         </div>
                       </>
@@ -438,19 +447,19 @@ function App() {
                           item.placeholder === 'lobby' ? 'from-royal-purple to-[#2E1A47]' :
                           item.placeholder === 'kitchen' ? 'from-deep-purple to-[#4A2C6A]' :
                           'from-royal-purple to-deep-purple'
-                        } text-gold text-2xl font-semibold font-heading text-center relative overflow-hidden`} style={{ display: 'none' }}>
+                        } text-gold text-lg md:text-xl lg:text-2xl font-semibold font-heading text-center relative overflow-hidden`} style={{ display: 'none' }}>
                           {item.title}
                         </div>
                       </>
                     )}
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-royal-purple/90 to-transparent p-8 text-gold text-center">
-                      <h3 className="font-heading text-2xl font-semibold m-0 text-shadow-gold">{item.title}</h3>
+                      <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-semibold m-0 text-shadow-gold">{item.title}</h3>
                     </div>
                   </div>
                 ))}
               </div>
               <button 
-                className="absolute top-1/2 right-4 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-royal-purple/80 border-2 border-gold text-gold text-3xl font-bold cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-sm hover:bg-gold hover:text-royal-purple hover:scale-110 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]" 
+                className="absolute top-1/2 right-2 md:right-4 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-royal-purple/80 border-2 border-gold text-gold text-2xl md:text-3xl font-bold cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-sm hover:bg-gold hover:text-royal-purple hover:scale-110 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]" 
                 onClick={nextSlide} 
                 aria-label="Next slide"
               >
@@ -475,48 +484,93 @@ function App() {
         </div>
       </section>
 
-      {/* Floor Plans Section */}
+      {/* Floor Plans & Site Map Section */}
       <section className="bg-cream py-16 md:py-24" ref={(el) => { sectionsRef.current[3] = el }}>
         <div className="max-w-6xl mx-auto px-8">
-          <h2 className="font-heading text-5xl font-semibold text-center mb-16 text-royal-purple tracking-wide relative pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Floor Plans</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            {[
-              { type: '2BHK', area: '1200 - 1400 sq.ft', plan: '2BHK Floor Plan' },
-              { type: '3BHK', area: '1600 - 1800 sq.ft', plan: '3BHK Floor Plan' },
-            ].map((plan, idx) => (
-              <div key={idx} className="bg-white rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(46,26,71,0.15)] transition-all duration-300 border border-gold/30 hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_20px_rgba(212,175,55,0.2)] hover:border-gold">
-                <div className="w-full aspect-[4/3] bg-cream relative before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-br before:from-gold/10 before:to-transparent">
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-royal-purple to-deep-purple text-gold text-xl font-semibold font-heading">{plan.plan}</div>
+          <h2 className="font-heading text-3xl md:text-5xl font-semibold text-center mb-6 md:mb-8 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Floor plans & site map</h2>
+          
+          {/* Toggle */}
+          <div className="flex justify-start mb-8 md:mb-12">
+            <div className="flex gap-2 bg-white rounded-lg p-1 border-2 border-gold/30 shadow-[0_4px_20px_rgba(46,26,71,0.15)]">
+              <button
+                onClick={() => setShowFloorPlans(true)}
+                className={`px-6 py-2 md:px-8 md:py-2.5 rounded-md font-heading font-semibold text-sm md:text-base transition-all duration-300 ${
+                  showFloorPlans
+                    ? 'bg-gold text-royal-purple shadow-[0_2px_8px_rgba(212,175,55,0.3)]'
+                    : 'bg-transparent text-royal-purple hover:text-gold'
+                }`}
+              >
+                Floor Plans
+              </button>
+              <button
+                onClick={() => setShowFloorPlans(false)}
+                className={`px-6 py-2 md:px-8 md:py-2.5 rounded-md font-heading font-semibold text-sm md:text-base transition-all duration-300 ${
+                  !showFloorPlans
+                    ? 'bg-gold text-royal-purple shadow-[0_2px_8px_rgba(212,175,55,0.3)]'
+                    : 'bg-transparent text-royal-purple hover:text-gold'
+                }`}
+              >
+                Site Map
+              </button>
+            </div>
+          </div>
+
+          {/* Floor Plans Content */}
+          {showFloorPlans && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {[
+                { type: '3 BHK + 3T', area: '1855 sq.ft', plan: '3 BHK + 3T Floor Plan' },
+                { type: '3 BHK + 4T + S', area: '2242 sq.ft', plan: '3 BHK + 4T + S Floor Plan' },
+                { type: '4 BHK + 5T + S', area: '2962 sq.ft', plan: '4 BHK + 5T + S Floor Plan' },
+              ].map((plan, idx) => (
+                <div key={idx} className="bg-white rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(46,26,71,0.15)] transition-all duration-300 border border-gold/30 hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_20px_rgba(212,175,55,0.2)] hover:border-gold">
+                  <div className="w-full aspect-[4/3] bg-cream relative before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-br before:from-gold/10 before:to-transparent">
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-royal-purple to-deep-purple text-gold text-base md:text-xl font-semibold font-heading px-4 text-center">{plan.plan}</div>
+                  </div>
+                  <div className="p-6 md:p-10 text-center">
+                    <h3 className="font-heading text-xl md:text-2xl lg:text-3xl mb-2 md:mb-3 text-royal-purple">{plan.type}</h3>
+                    <p className="text-text-light mb-4 md:mb-6 text-sm md:text-base lg:text-lg">{plan.area}</p>
+                    <button className="px-6 md:px-8 py-2.5 md:py-3.5 bg-transparent text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-xs md:text-sm lg:text-base cursor-pointer transition-all duration-300 tracking-wide hover:bg-deep-purple hover:text-gold hover:border-gold">Download Floor Plan</button>
+                  </div>
                 </div>
-                <div className="p-10 text-center">
-                  <h3 className="font-heading text-3xl mb-3 text-royal-purple">{plan.type}</h3>
-                  <p className="text-text-light mb-6 text-lg">{plan.area}</p>
-                  <button className="px-8 py-3.5 bg-transparent text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-base cursor-pointer transition-all duration-300 tracking-wide hover:bg-deep-purple hover:text-gold hover:border-gold">Download Floor Plan</button>
+              ))}
+            </div>
+          )}
+
+          {/* Site Map Content */}
+          {!showFloorPlans && (
+            <div className="w-full">
+              <div className="bg-white rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(46,26,71,0.15)] border border-gold/30">
+                <div className="w-full aspect-[4/3] bg-cream flex items-center justify-center">
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-royal-purple to-deep-purple text-gold text-lg md:text-xl lg:text-2xl font-semibold font-heading text-center px-4">
+                    Site Map Image
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Amenities Section */}
       <section id="amenities" className="py-16 md:py-24" ref={(el) => { sectionsRef.current[4] = el }}>
         <div className="max-w-6xl mx-auto px-8">
-          <h2 className="font-heading text-5xl font-semibold text-center mb-16 text-royal-purple tracking-wide relative pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Amenities</h2>
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Amenities</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-            {[
-              { icon: '🏋️', text: 'Gym & Fitness' },
-              { icon: '🏊', text: 'Swimming Pool' },
-              { icon: '🏛️', text: 'Clubhouse' },
-              { icon: '🚗', text: 'Parking' },
-              { icon: '⚡', text: 'Power Backup' },
-              { icon: '🛡️', text: '24/7 Security' },
-              { icon: '🌳', text: 'Landscaped Gardens' },
-              { icon: '🎯', text: 'Sports Facilities' },
+            {
+            [
+              { icon: amenity1, text: 'Gym & Fitness' },
+              { icon: amenity2, text: 'Swimming Pool' },
+              { icon: amenity3, text: 'Clubhouse' },
+              { icon: amenity4, text: 'Parking' },
+              { icon: amenity5, text: 'Power Backup' },
+              { icon: amenity6, text: '24/7 Security' },
+              { icon: amenity7, text: 'Landscaped Gardens' },
+              { icon: amenity8, text: 'Sports Facilities' },
             ].map((amenity, idx) => (
-              <div key={idx} className="flex flex-col items-center gap-4 p-10 bg-white rounded-xl transition-all duration-300 border border-gold/30 relative before:content-[''] before:absolute before:top-4 before:left-1/2 before:-translate-x-1/2 before:w-16 before:h-0.5 before:bg-gold before:opacity-0 before:transition-opacity before:duration-300 hover:-translate-y-1.5 hover:bg-cream hover:shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_15px_rgba(212,175,55,0.2)] hover:border-gold hover:before:opacity-100">
-                <div className="text-5xl drop-shadow-[0_2px_4px_rgba(212,175,55,0.3)]">{amenity.icon}</div>
-                <span className="font-heading font-medium text-royal-purple text-center text-lg">{amenity.text}</span>
+              <div key={idx} className="relative w-full aspect-square rounded-xl bg-[#332363] p-4 md:p-6 flex flex-col items-center justify-start pt-6 md:pt-8 transition-all duration-300 border border-gold/30 hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_15px_rgba(212,175,55,0.2)] hover:border-gold">
+                <img src={amenity.icon} alt={amenity.text} className="w-3/4 h-auto object-contain mb-3 md:mb-4"/>
+                <span className="text-gold font-heading text-sm md:text-base text-center">{amenity.text}</span>
               </div>
             ))}
           </div>
@@ -526,7 +580,7 @@ function App() {
       {/* Location Section */}
       <section className="bg-cream py-16 md:py-24" ref={(el) => { sectionsRef.current[5] = el }}>
         <div className="max-w-6xl mx-auto px-8">
-          <h2 className="font-heading text-5xl font-semibold text-center mb-16 text-royal-purple tracking-wide relative pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Location</h2>
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Location</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
             <div className="w-full h-[500px] rounded-xl overflow-hidden border-2 border-gold shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_15px_rgba(212,175,55,0.3)]">
               <iframe 
@@ -542,7 +596,7 @@ function App() {
               ></iframe>
             </div>
             <div className="bg-gradient-to-br from-royal-purple to-deep-purple p-10 rounded-xl shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_20px_rgba(212,175,55,0.2)] border-2 border-gold relative overflow-hidden h-[500px] flex flex-col before:content-[''] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_20%_30%,rgba(212,175,55,0.05)_0%,transparent_50%),radial-gradient(circle_at_80%_70%,rgba(244,223,165,0.03)_0%,transparent_50%)] before:pointer-events-none before:z-[1]">
-              <h3 className="font-heading text-3xl mb-10 text-gold text-center relative z-[1] tracking-wide text-shadow-gold">Location Advantages</h3>
+              <h3 className="font-heading text-2xl md:text-3xl mb-8 md:mb-10 text-gold text-center relative z-[1] tracking-wide text-shadow-gold">Location Advantages</h3>
               <div className="overflow-y-auto flex-1 pr-2 relative z-[1] scrollbar-hide">
                 {[
                   { title: 'Transport', items: ['✈️ Nearby Upcoming Jewar Airport', '🛣️ Eastern Peripheral Expressway (06 Mins)', '📍 Noida Sec- 62 (15 Mins)', '🚂 Ghaziabad Railway Station (20 Mins)', '🚇 Shaheed Sthal Metro Station (20 Mins)', '🏛️ Akshardham (30 Mins)'] },
@@ -552,10 +606,10 @@ function App() {
                   { title: 'Shopping Malls', items: ['🛍️ The Opulent Mall', '🛍️ Gaur City Mall'] },
                 ].map((category, idx) => (
                   <div key={idx} className="mb-8 relative z-[1] last:mb-0">
-                    <h4 className="font-heading text-lg font-semibold text-royal-purple bg-gold px-5 py-3 mb-4 rounded-md tracking-wide shadow-[0_2px_8px_rgba(0,0,0,0.2)]">{category.title}</h4>
+                    <h4 className="font-heading text-base md:text-lg font-semibold text-royal-purple bg-gold px-4 md:px-5 py-2.5 md:py-3 mb-3 md:mb-4 rounded-md tracking-wide shadow-[0_2px_8px_rgba(0,0,0,0.2)]">{category.title}</h4>
                     <ul className="list-none p-0 m-0">
                       {category.items.map((item, itemIdx) => (
-                        <li key={itemIdx} className="py-3.5 pl-6 border-b border-gold/20 text-base text-soft-gold-glow transition-all duration-300 relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-1 before:bg-gold before:rounded-full before:opacity-0 before:transition-opacity before:duration-300 hover:pl-8 hover:text-gold hover:translate-x-1 hover:before:opacity-100 last:border-b-0">
+                        <li key={itemIdx} className="py-2.5 md:py-3.5 pl-5 md:pl-6 border-b border-gold/20 text-sm md:text-base text-soft-gold-glow transition-all duration-300 relative before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-1 before:bg-gold before:rounded-full before:opacity-0 before:transition-opacity before:duration-300 hover:pl-7 md:hover:pl-8 hover:text-gold hover:translate-x-1 hover:before:opacity-100 last:border-b-0">
                           {item}
                         </li>
                       ))}
@@ -571,10 +625,10 @@ function App() {
       {/* Pricing Section */}
       <section id="pricing" className="py-12" ref={(el) => { sectionsRef.current[6] = el }}>
         <div className="max-w-6xl mx-auto px-8">
-          <h2 className="font-heading text-5xl font-semibold text-center mb-16 text-royal-purple tracking-wide relative pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Pricing</h2>
-          <p className="text-center text-text-light text-base italic mb-4">*Prices are subject to change. Contact us for current rates and availability.</p>
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Pricing</h2>
+          <p className="text-center text-text-light text-sm md:text-base italic mb-4">*Prices are subject to change. Contact us for current rates and availability.</p>
           <div className="text-center mt-0">
-            <button className="px-10 py-3.5 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-base cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)]" onClick={() => openModal('pricing')}>Download Pricing PDF</button>
+            <button className="px-8 md:px-10 py-2.5 md:py-3.5 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-sm md:text-base cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)]" onClick={() => openModal('pricing')}>Download Pricing PDF</button>
           </div>
         </div>
       </section>
@@ -583,8 +637,8 @@ function App() {
       <section className="bg-gradient-to-br from-[#1a0f2e] via-royal-purple to-deep-purple text-white relative overflow-hidden py-16 md:py-24" ref={(el) => { sectionsRef.current[7] = el }}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(212,175,55,0.08)_0%,transparent_50%),radial-gradient(circle_at_80%_70%,rgba(244,223,165,0.06)_0%,transparent_50%)] pointer-events-none"></div>
         <div className="max-w-6xl mx-auto px-8 relative z-[1]">
-          <h2 className="font-heading text-5xl font-semibold text-center mb-4 text-gold relative z-[1] tracking-wide relative pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent">Get in Touch</h2>
-          <p className="text-center text-soft-gold-glow mb-8 text-lg relative z-[1]">Fill out the form below and we'll get back to you shortly</p>
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-4 text-gold relative z-[1] tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent">Get in Touch</h2>
+          <p className="text-center text-soft-gold-glow mb-6 md:mb-8 text-base md:text-lg relative z-[1]">Fill out the form below and we'll get back to you shortly</p>
           <form className="max-w-2xl mx-auto flex flex-col gap-6 relative z-[1]" onSubmit={handleSubmit} noValidate>
             <div className="w-full relative">
               <input
@@ -593,7 +647,7 @@ function App() {
                 placeholder="Your Name *"
                 value={formData.name}
                 onChange={handleChange}
-                className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 resize-y block opacity-100 visible ${
+                className={`w-full px-4 py-3 md:py-4 border-2 rounded-lg bg-cream text-royal-purple text-sm md:text-base font-body transition-all duration-300 resize-y block opacity-100 visible ${
                   formErrors.name ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
                 }`}
               />
@@ -606,7 +660,7 @@ function App() {
                 placeholder="Phone Number *"
                 value={formData.phone}
                 onChange={handleChange}
-                className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 resize-y block opacity-100 visible ${
+                className={`w-full px-4 py-3 md:py-4 border-2 rounded-lg bg-cream text-royal-purple text-sm md:text-base font-body transition-all duration-300 resize-y block opacity-100 visible ${
                   formErrors.phone ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
                 }`}
               />
@@ -619,7 +673,7 @@ function App() {
                 placeholder="Email Address *"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 resize-y block opacity-100 visible ${
+                className={`w-full px-4 py-3 md:py-4 border-2 rounded-lg bg-cream text-royal-purple text-sm md:text-base font-body transition-all duration-300 resize-y block opacity-100 visible ${
                   formErrors.email ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
                 }`}
               />
@@ -638,7 +692,7 @@ function App() {
               />
               {formErrors.message && <span className="block text-red-300 text-sm mt-2 italic">{formErrors.message}</span>}
             </div>
-            <button type="submit" className="px-10 py-4 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-lg cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)] disabled:opacity-50 disabled:cursor-not-allowed" disabled={isSubmitting}>
+            <button type="submit" className="px-8 md:px-10 py-3 md:py-4 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-base md:text-lg cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)] disabled:opacity-50 disabled:cursor-not-allowed" disabled={isSubmitting}>
               {isSubmitting ? 'Submitting...' : 'Request Callback'}
             </button>
           </form>
@@ -648,10 +702,10 @@ function App() {
             <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-[10000] p-4 animate-[fadeIn_0.3s_ease-out]" onClick={closeModal}>
               <div className="bg-gradient-to-br from-royal-purple to-deep-purple border-2 border-gold rounded-2xl p-10 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_20px_rgba(212,175,55,0.4)] animate-[slideUp_0.3s_ease-out] scrollbar-hide" onClick={(e) => e.stopPropagation()}>
                 <button className="absolute top-4 right-4 bg-transparent border-2 border-gold text-gold w-9 h-9 rounded-full text-2xl cursor-pointer flex items-center justify-center transition-all duration-300 leading-none p-0 hover:bg-gold hover:text-royal-purple hover:rotate-90" onClick={closeModal}>&times;</button>
-                <h3 className="font-heading text-3xl text-gold text-center mb-2 tracking-wide">
+                <h3 className="font-heading text-2xl md:text-3xl text-gold text-center mb-2 tracking-wide">
                   {modalType === 'brochure' ? 'Download Brochure' : 'Download Pricing PDF'}
                 </h3>
-                <p className="text-center text-soft-gold-glow mb-8 text-base">Please fill in your details to download</p>
+                <p className="text-center text-soft-gold-glow mb-6 md:mb-8 text-sm md:text-base">Please fill in your details to download</p>
                 <form className="flex flex-col gap-6" onSubmit={handleModalSubmit} noValidate>
                   <div className="w-full relative">
                     <input
@@ -705,7 +759,7 @@ function App() {
                     />
                     {formErrors.message && <span className="block text-red-300 text-sm mt-2 italic">{formErrors.message}</span>}
                   </div>
-                  <button type="submit" className="px-10 py-4 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-lg cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)] disabled:opacity-50 disabled:cursor-not-allowed" disabled={isSubmitting}>
+                  <button type="submit" className="px-8 md:px-10 py-3 md:py-4 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-base md:text-lg cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)] disabled:opacity-50 disabled:cursor-not-allowed" disabled={isSubmitting}>
                     {isSubmitting ? 'Processing...' : 'Download'}
                   </button>
                 </form>
@@ -720,17 +774,17 @@ function App() {
         <div className="max-w-6xl mx-auto px-8">
           <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-12 mb-12">
             <div>
-              <h3 className="font-heading text-3xl mb-6 text-gold">SKA DIVINE</h3>
-              <p className="text-white/85 mb-3 leading-relaxed">Premium residential project by SKA Developers</p>
+              <h3 className="font-heading text-2xl md:text-3xl mb-4 md:mb-6 text-gold">SKA DIVINE</h3>
+              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">Premium residential project by SKA Developers</p>
             </div>
             <div>
-              <h4 className="font-heading text-xl mb-6 text-soft-gold-glow">Contact</h4>
-              <p className="text-white/85 mb-3 leading-relaxed">📞 +91 98765 43210</p>
-              <p className="text-white/85 mb-3 leading-relaxed">✉️ info@skadivine.com</p>
-              <p className="text-white/85 mb-3 leading-relaxed">📍 Prime Downtown, City</p>
+              <h4 className="font-heading text-lg md:text-xl mb-4 md:mb-6 text-soft-gold-glow">Contact</h4>
+              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">📞 +91 98765 43210</p>
+              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">✉️ info@skadivine.com</p>
+              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">📍 Prime Downtown, City</p>
             </div>
       <div>
-              <h4 className="font-heading text-xl mb-6 text-soft-gold-glow">Quick Links</h4>
+              <h4 className="font-heading text-lg md:text-xl mb-4 md:mb-6 text-soft-gold-glow">Quick Links</h4>
               <ul className="list-none">
                 <li className="mb-3">
                   <a 
@@ -772,7 +826,7 @@ function App() {
             </div>
           </div>
           <div className="text-center pt-8 border-t border-gold/20">
-            <p className="text-white/70 text-sm mb-2">&copy; 2024 SKA DIVINE. All rights reserved.</p>
+            <p className="text-white/70 text-xs md:text-sm mb-2">&copy; 2024 SKA DIVINE. All rights reserved.</p>
             <p className="text-white/60 text-xs">*Images are for representation purposes only. Actual product may vary.</p>
           </div>
       </div>
