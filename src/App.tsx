@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, type CSSProperties } from 'react'
 import skaIntroVideo from './assets/skaIntro.mp4'
 import amenity1 from './assets/amenities/1.png'
 import amenity2 from './assets/amenities/2.png'
@@ -8,6 +8,12 @@ import amenity5 from './assets/amenities/5.png'
 import amenity6 from './assets/amenities/6.png'
 import amenity7 from './assets/amenities/7.png'
 import amenity8 from './assets/amenities/8.png'
+import sitemap from './assets/floor_sitemap/sitemap.png'
+import floorPlan1 from './assets/floor_sitemap/1.png'
+import floorPlan2 from './assets/floor_sitemap/2.png'
+import floorPlan3 from './assets/floor_sitemap/3.png'
+import info from './assets/gallery/info.png'
+import info2 from './assets/gallery/about.jpg'
 
 function App() {
   const [formData, setFormData] = useState({
@@ -30,6 +36,7 @@ function App() {
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
   const [showFloorPlans, setShowFloorPlans] = useState(true)
+  const [fullscreenImage, setFullscreenImage] = useState<string | null>(null)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
   const videoRef = useRef<HTMLVideoElement>(null)
   const carouselVideoRefs = useRef<(HTMLVideoElement | null)[]>([])
@@ -145,9 +152,9 @@ function App() {
   }, [])
 
   const scrollToContact = () => {
-    const contactSection = document.querySelector('.contact')
+    const contactSection = document.getElementById('contact')
     if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' })
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 
@@ -293,6 +300,12 @@ function App() {
 
   return (
     <div className="w-full overflow-x-hidden">
+      <style>{`
+        @keyframes fadeSlide {
+          from { opacity: 0; transform: translateX(-12px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+      `}</style>
       {/* Sticky Book Site Visit Button */}
       <button 
         className={`fixed top-4 right-4 md:top-8 md:right-8 z-[1000] px-6 py-2.5 md:px-8 md:py-3.5 bg-gold text-royal-purple border-2 border-gold rounded-full font-heading font-semibold text-xs md:text-sm cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4),0_4px_15px_rgba(0,0,0,0.2)] transition-all duration-300 tracking-wide ${
@@ -350,22 +363,82 @@ function App() {
       </section>
 
       {/* Highlights Section */}
-      <section id="highlights" className="bg-cream py-16 md:py-24" ref={(el) => { sectionsRef.current[1] = el }}>
+      <section
+        id="highlights"
+        className="bg-cream py-16 md:py-24"
+        ref={(el) => { sectionsRef.current[1] = el }}
+      >
         <div className="max-w-6xl mx-auto px-8">
-          <h2 className="font-heading text-3xl md:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Why Choose SKA DIVINE?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+          <h2 className="font-heading text-3xl md:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">
+            Why Choose SKA DIVINE?
+          </h2>
+          <p className="text-center text-text-light max-w-3xl mx-auto mb-12 md:mb-16 text-base md:text-lg">
+            Minimal, design-forward living with substance to match: curated residences, certified safety, and a campus built for everyday ease.
+          </p>
+          <div className="space-y-10 md:space-y-14">
             {[
-              { icon: '💰', title: 'Competitive Pricing', desc: 'Starting from ₹1.2 Cr with flexible payment plans' },
-              { icon: '🏠', title: 'Spacious Units', desc: '2BHK & 3BHK apartments ranging from 1200-1800 sq.ft' },
-              { icon: '🏊', title: 'Premium Amenities', desc: 'World-class facilities including pool, gym, and clubhouse' },
-              { icon: '📍', title: 'Prime Location', desc: 'Close to metro, schools, malls, and IT hubs' },
-              { icon: '🔒', title: 'RERA Approved', desc: 'Fully compliant with all regulatory requirements' },
-              { icon: '📅', title: 'Early Possession', desc: 'Ready to move in by Q2 2025' },
-            ].map((item, idx) => (
-              <div key={idx} className="bg-white p-10 rounded-xl text-center shadow-[0_4px_20px_rgba(46,26,71,0.15)] transition-all duration-300 border border-gold/30 relative before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-1 before:bg-gradient-to-r before:from-gold before:to-soft-gold-glow before:rounded-t-xl hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_20px_rgba(212,175,55,0.2)] hover:border-gold">
-                <div className="text-4xl md:text-5xl mb-4 drop-shadow-[0_2px_4px_rgba(212,175,55,0.3)]">{item.icon}</div>
-                <h3 className="font-heading text-lg md:text-xl mb-3 text-royal-purple">{item.title}</h3>
-                <p className="text-text-light text-sm md:text-base leading-relaxed">{item.desc}</p>
+              {
+                image: info,
+                items: [
+                  { title: 'Residence Mix', desc: '3/4BHK luxurious apartments.' },
+                  { title: 'Regulatory Clarity', desc: 'UP RERA No. UPRERAPRJ556045/10/2024.' },
+                  { title: 'Land Canvas', desc: 'Spread over approx 5 acres.' },
+                  { title: 'Trust & Finance', desc: 'SBI approved project.' },
+                  { title: 'Skyline', desc: '3 majestic towers, 27 storeys high.' },
+                ],
+              },
+              {
+                image: info2,
+                items: [
+                  { title: 'Lifestyle Volume', desc: '1,26,000 sq. ft. club, landscaping & swimming pool.' },
+                  { title: 'Connected Living', desc: 'Seamless connectivity to Delhi NCR.' },
+                  { title: 'Sustainability', desc: 'Pre-certified platinum-rated green township.' },
+                  { title: 'Structural Assurance', desc: 'Earthquake-resistant frame structure.' },
+                  { title: 'Timeline', desc: 'Possession August 2029.' },
+                ],
+              },
+            ].map((row, rowIdx) => (
+              <div
+                key={rowIdx}
+                className={`grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] gap-8 md:gap-12 items-center ${
+                  rowIdx % 2 === 1 ? 'md:[&>div:first-child]:order-2 md:[&>div:last-child]:order-1' : ''
+                }`}
+              >
+                <div className="overflow-hidden rounded-2xl border border-royal-purple/10 shadow-[0_18px_60px_rgba(46,26,71,0.15)]">
+                  <div className="min-h-[320px] md:min-h-[440px] bg-royal-purple/10">
+                    <img
+                      src={row.image}
+                      alt="SKA Divine residence"
+                      className="h-full w-full object-cover scale-[1.3]"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3 md:gap-4">
+                  {row.items.map((item, idx) => {
+                    const textStyle: CSSProperties = {
+                      animation: `fadeSlide 0.45s ease-out ${idx * 80}ms both`
+                    }
+                    return (
+                      <div
+                        key={idx}
+                        className="relative pl-6 md:pl-8 py-3 md:py-4 border-l-2 border-gold/80"
+                      >
+                        <div
+                          className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+                          style={textStyle}
+                        >
+                          <span className="font-heading text-sm tracking-[0.18em] uppercase text-royal-purple">
+                            {item.title}
+                          </span>
+                          <p className="font-body text-base md:text-lg text-royal-purple leading-relaxed sm:text-right">
+                            {item.desc}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             ))}
           </div>
@@ -377,7 +450,7 @@ function App() {
         <div className="max-w-6xl mx-auto px-8">
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Gallery</h2>
           <div className="max-w-4xl mx-auto relative">
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-gold shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_30px_rgba(212,175,55,0.3)] bg-royal-purple">
+            <div className="relative w-full aspect-video rounded-3xl overflow-hidden border-2 border-gold shadow-[0_16px_60px_rgba(46,26,71,0.25),0_0_30px_rgba(212,175,55,0.3)] bg-royal-purple/80">
               <button 
                 className="absolute top-1/2 left-2 md:left-4 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-royal-purple/80 border-2 border-gold text-gold text-2xl md:text-3xl font-bold cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-sm hover:bg-gold hover:text-royal-purple hover:scale-110 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]" 
                 onClick={prevSlide} 
@@ -402,61 +475,72 @@ function App() {
                   }
                 }}
               >
-                {galleryItems.map((item, index) => (
-                  <div
-                    key={index}
-                    className="absolute top-0 left-0 w-full h-full transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center justify-center"
-                    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-                  >
-                    {item.type === 'video' ? (
-                      <>
-                        <video
-                          ref={(el) => { carouselVideoRefs.current[index] = el }}
-                          className="w-full h-full object-cover block"
-                          src={item.src}
-                          loop
-                          muted
-                          playsInline
-                          onError={(e) => {
-                            const target = e.target as HTMLVideoElement
-                            target.style.display = 'none'
-                            const placeholder = target.nextElementSibling as HTMLElement
-                            if (placeholder) placeholder.style.display = 'flex'
-                          }}
-                        />
-                        <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${item.placeholder === 'interior' ? 'from-deep-purple to-[#5A3C7A]' : 'from-[#1a0f2e] to-deep-purple'} text-gold text-lg md:text-xl lg:text-2xl font-semibold font-heading text-center relative overflow-hidden`} style={{ display: 'none' }}>
-                          {item.title}
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <img
-                          className="w-full h-full object-cover block"
-                          src={item.src}
-                          alt={item.title}
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement
-                            target.style.display = 'none'
-                            const placeholder = target.nextElementSibling as HTMLElement
-                            if (placeholder) placeholder.style.display = 'flex'
-                          }}
-                        />
-                        <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${
-                          item.placeholder === 'exterior' ? 'from-royal-purple to-[#4A2C6A]' :
-                          item.placeholder === 'amenities' ? 'from-[#3A235A] to-royal-purple' :
-                          item.placeholder === 'lobby' ? 'from-royal-purple to-[#2E1A47]' :
-                          item.placeholder === 'kitchen' ? 'from-deep-purple to-[#4A2C6A]' :
-                          'from-royal-purple to-deep-purple'
-                        } text-gold text-lg md:text-xl lg:text-2xl font-semibold font-heading text-center relative overflow-hidden`} style={{ display: 'none' }}>
-                          {item.title}
-                        </div>
-                      </>
-                    )}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-royal-purple/90 to-transparent p-8 text-gold text-center">
-                      <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-semibold m-0 text-shadow-gold">{item.title}</h3>
+                {galleryItems.map((item, index) => {
+                  const total = galleryItems.length
+                  const offset = (index - currentSlide + total) % total
+                  const style: CSSProperties =
+                    offset === 0
+                      ? { transform: 'translateY(0) scale(1)', opacity: 1, zIndex: 30, filter: 'blur(0px)' }
+                      : offset === 1
+                        ? { transform: 'translateY(26px) scale(0.96)', opacity: 0.55, zIndex: 20, filter: 'blur(1px)' }
+                        : { transform: 'translateY(-30px) scale(0.9)', opacity: 0, zIndex: 5, filter: 'blur(4px)', pointerEvents: 'none' }
+
+                  return (
+                    <div
+                      key={index}
+                      className="absolute top-0 left-0 w-full h-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center justify-center rounded-3xl overflow-hidden"
+                      style={style}
+                    >
+                      {item.type === 'video' ? (
+                        <>
+                          <video
+                            ref={(el) => { carouselVideoRefs.current[index] = el }}
+                            className="w-full h-full object-cover block"
+                            src={item.src}
+                            loop
+                            muted
+                            playsInline
+                            onError={(e) => {
+                              const target = e.target as HTMLVideoElement
+                              target.style.display = 'none'
+                              const placeholder = target.nextElementSibling as HTMLElement
+                              if (placeholder) placeholder.style.display = 'flex'
+                            }}
+                          />
+                          <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${item.placeholder === 'interior' ? 'from-deep-purple to-[#5A3C7A]' : 'from-[#1a0f2e] to-deep-purple'} text-gold text-lg md:text-xl lg:text-2xl font-semibold font-heading text-center relative overflow-hidden`} style={{ display: 'none' }}>
+                            {item.title}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <img
+                            className="w-full h-full object-cover block"
+                            src={item.src}
+                            alt={item.title}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              target.style.display = 'none'
+                              const placeholder = target.nextElementSibling as HTMLElement
+                              if (placeholder) placeholder.style.display = 'flex'
+                            }}
+                          />
+                          <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${
+                            item.placeholder === 'exterior' ? 'from-royal-purple to-[#4A2C6A]' :
+                            item.placeholder === 'amenities' ? 'from-[#3A235A] to-royal-purple' :
+                            item.placeholder === 'lobby' ? 'from-royal-purple to-[#2E1A47]' :
+                            item.placeholder === 'kitchen' ? 'from-deep-purple to-[#4A2C6A]' :
+                            'from-royal-purple to-deep-purple'
+                          } text-gold text-lg md:text-xl lg:text-2xl font-semibold font-heading text-center relative overflow-hidden`} style={{ display: 'none' }}>
+                            {item.title}
+                          </div>
+                        </>
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-royal-purple/90 to-transparent p-8 text-gold text-center">
+                        <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-semibold m-0 text-shadow-gold">{item.title}</h3>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
               <button 
                 className="absolute top-1/2 right-2 md:right-4 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-royal-purple/80 border-2 border-gold text-gold text-2xl md:text-3xl font-bold cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-sm hover:bg-gold hover:text-royal-purple hover:scale-110 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]" 
@@ -519,18 +603,17 @@ function App() {
           {showFloorPlans && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {[
-                { type: '3 BHK + 3T', area: '1855 sq.ft', plan: '3 BHK + 3T Floor Plan' },
-                { type: '3 BHK + 4T + S', area: '2242 sq.ft', plan: '3 BHK + 4T + S Floor Plan' },
-                { type: '4 BHK + 5T + S', area: '2962 sq.ft', plan: '4 BHK + 5T + S Floor Plan' },
+                { type: '3 BHK + 3T', area: '1855 sq.ft', plan: '3 BHK + 3T Floor Plan', image:floorPlan1 },
+                { type: '3 BHK + 4T + S', area: '2242 sq.ft', plan: '3 BHK + 4T + S Floor Plan', image: floorPlan2 },
+                { type: '4 BHK + 5T + S', area: '2962 sq.ft', plan: '4 BHK + 5T + S Floor Plan', image:floorPlan3 },
               ].map((plan, idx) => (
                 <div key={idx} className="bg-white rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(46,26,71,0.15)] transition-all duration-300 border border-gold/30 hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_20px_rgba(212,175,55,0.2)] hover:border-gold">
-                  <div className="w-full aspect-[4/3] bg-cream relative before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-br before:from-gold/10 before:to-transparent">
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-royal-purple to-deep-purple text-gold text-base md:text-xl font-semibold font-heading px-4 text-center">{plan.plan}</div>
+                  <div className="w-full aspect-[4/3] bg-cream relative before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-br before:from-gold/10 before:to-transparent cursor-pointer" onClick={() => setFullscreenImage(plan.image)}>
+                    <img src={plan.image} alt={plan.plan} className="w-full h-full object-cover"/>
                   </div>
-                  <div className="p-6 md:p-10 text-center">
-                    <h3 className="font-heading text-xl md:text-2xl lg:text-3xl mb-2 md:mb-3 text-royal-purple">{plan.type}</h3>
-                    <p className="text-text-light mb-4 md:mb-6 text-sm md:text-base lg:text-lg">{plan.area}</p>
-                    <button className="px-6 md:px-8 py-2.5 md:py-3.5 bg-transparent text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-xs md:text-sm lg:text-base cursor-pointer transition-all duration-300 tracking-wide hover:bg-deep-purple hover:text-gold hover:border-gold">Download Floor Plan</button>
+                  <div className="p-4 md:p-6 text-center">
+                    <h3 className="font-heading text-lg md:text-xl lg:text-2xl mb-1 md:mb-2 text-royal-purple">{plan.type}</h3>
+                    <p className="text-text-light text-xs md:text-sm lg:text-base">{plan.area}</p>
                   </div>
                 </div>
               ))}
@@ -541,10 +624,8 @@ function App() {
           {!showFloorPlans && (
             <div className="w-full">
               <div className="bg-white rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(46,26,71,0.15)] border border-gold/30">
-                <div className="w-full aspect-[4/3] bg-cream flex items-center justify-center">
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-royal-purple to-deep-purple text-gold text-lg md:text-xl lg:text-2xl font-semibold font-heading text-center px-4">
-                    Site Map Image
-                  </div>
+                <div className="w-full aspect-[4/3] bg-cream flex items-center justify-center cursor-pointer" onClick={() => setFullscreenImage(sitemap)}>
+                  <img src={sitemap} alt="Site Map" className="w-full h-full object-cover"/>
                 </div>
               </div>
             </div>
@@ -634,7 +715,7 @@ function App() {
       </section>
 
       {/* Contact Form Section */}
-      <section className="bg-gradient-to-br from-[#1a0f2e] via-royal-purple to-deep-purple text-white relative overflow-hidden py-16 md:py-24" ref={(el) => { sectionsRef.current[7] = el }}>
+      <section id="contact" className="bg-gradient-to-br from-[#1a0f2e] via-royal-purple to-deep-purple text-white relative overflow-hidden py-16 md:py-24" ref={(el) => { sectionsRef.current[7] = el }}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(212,175,55,0.08)_0%,transparent_50%),radial-gradient(circle_at_80%_70%,rgba(244,223,165,0.06)_0%,transparent_50%)] pointer-events-none"></div>
         <div className="max-w-6xl mx-auto px-8 relative z-[1]">
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-4 text-gold relative z-[1] tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent">Get in Touch</h2>
@@ -699,7 +780,7 @@ function App() {
 
           {/* Modal for PDF Downloads */}
           {showModal && (
-            <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-[10000] p-4 animate-[fadeIn_0.3s_ease-out]" onClick={closeModal}>
+            <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-[99999] p-4 animate-[fadeIn_0.3s_ease-out]" onClick={closeModal}>
               <div className="bg-gradient-to-br from-royal-purple to-deep-purple border-2 border-gold rounded-2xl p-10 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_20px_rgba(212,175,55,0.4)] animate-[slideUp_0.3s_ease-out] scrollbar-hide" onClick={(e) => e.stopPropagation()}>
                 <button className="absolute top-4 right-4 bg-transparent border-2 border-gold text-gold w-9 h-9 rounded-full text-2xl cursor-pointer flex items-center justify-center transition-all duration-300 leading-none p-0 hover:bg-gold hover:text-royal-purple hover:rotate-90" onClick={closeModal}>&times;</button>
                 <h3 className="font-heading text-2xl md:text-3xl text-gold text-center mb-2 tracking-wide">
@@ -831,6 +912,29 @@ function App() {
           </div>
       </div>
       </footer>
+
+      {/* Fullscreen Image Popup */}
+      {fullscreenImage && (
+        <div 
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[99999] p-4 animate-[fadeIn_0.3s_ease-out]" 
+          onClick={() => setFullscreenImage(null)}
+        >
+          <button 
+            className="absolute top-4 right-4 bg-transparent border-2 border-gold text-gold w-10 h-10 md:w-12 md:h-12 rounded-full text-2xl md:text-3xl cursor-pointer flex items-center justify-center transition-all duration-300 hover:bg-gold hover:text-royal-purple hover:rotate-90 z-[100000]" 
+            onClick={() => setFullscreenImage(null)}
+            aria-label="Close"
+          >
+            &times;
+          </button>
+          <div className="max-w-[95vw] max-h-[95vh] w-full h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            <img 
+              src={fullscreenImage} 
+              alt="Floor Plan" 
+              className="max-w-full max-h-full object-contain rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_20px_rgba(212,175,55,0.4)]"
+            />
+          </div>
+        </div>
+      )}
       </div>
   )
 }
