@@ -14,6 +14,16 @@ import floorPlan2 from './assets/floor_sitemap/2.png'
 import floorPlan3 from './assets/floor_sitemap/3.png'
 import info from './assets/gallery/info.png'
 import info2 from './assets/gallery/about.jpg'
+import brochurePDF from './assets/brochure.pdf'
+import pricePDF from './assets/price_2025.pdf'
+import gallery1 from './assets/gallery/gallery-1.jpg'
+import gallery2 from './assets/gallery/gallery-2.jpg'
+import gallery3 from './assets/gallery/gallery-3.jpg'
+import gallery4 from './assets/gallery/gallery-4.jpg'
+import gallery5 from './assets/gallery/gallery-5.jpg'
+import gallery6 from './assets/gallery/gallery-6.jpg'
+import gallery7 from './assets/gallery/gallery-7.jpg'
+import gallery8 from './assets/gallery/gallery-8.jpg'
 
 function App() {
   const [formData, setFormData] = useState({
@@ -39,16 +49,17 @@ function App() {
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
   const videoRef = useRef<HTMLVideoElement>(null)
-  const carouselVideoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
-  // Gallery items - can be images or videos
+  // Gallery items - using 8 gallery images
   const galleryItems = [
-    { type: 'image', src: '/gallery/exterior.jpg', title: 'Exterior View', placeholder: 'exterior' },
-    { type: 'video', src: '/gallery/interior-video.mp4', title: 'Interior Design', placeholder: 'interior' },
-    { type: 'image', src: '/gallery/amenities.jpg', title: 'Amenities', placeholder: 'amenities' },
-    { type: 'image', src: '/gallery/lobby.jpg', title: 'Lobby', placeholder: 'lobby' },
-    { type: 'video', src: '/gallery/bedroom-video.mp4', title: 'Bedroom', placeholder: 'bedroom' },
-    { type: 'image', src: '/gallery/kitchen.jpg', title: 'Kitchen', placeholder: 'kitchen' },
+    { type: 'image', src: gallery1, title: 'Gallery View 1' },
+    { type: 'image', src: gallery2, title: 'Gallery View 2' },
+    { type: 'image', src: gallery3, title: 'Gallery View 3' },
+    { type: 'image', src: gallery4, title: 'Gallery View 4' },
+    { type: 'image', src: gallery5, title: 'Gallery View 5' },
+    { type: 'image', src: gallery6, title: 'Gallery View 6' },
+    { type: 'image', src: gallery7, title: 'Gallery View 7' },
+    { type: 'image', src: gallery8, title: 'Gallery View 8' },
   ]
 
   const nextSlide = () => {
@@ -63,18 +74,18 @@ function App() {
     setCurrentSlide(index)
   }
 
-  // Auto-play videos when they come into view
   useEffect(() => {
-    carouselVideoRefs.current.forEach((video, index) => {
-      if (video && index === currentSlide && galleryItems[index]?.type === 'video') {
-        video.play().catch(() => {
-          // Autoplay prevented, user interaction required
-        })
-      } else if (video) {
-        video.pause()
-      }
-    })
-  }, [currentSlide, galleryItems])
+    if (showModal) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+  
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [showModal])
+  
 
   // Keyboard navigation for carousel
   useEffect(() => {
@@ -230,10 +241,9 @@ function App() {
 
   const downloadPDF = (type: 'brochure' | 'pricing') => {
     // Create a temporary link to trigger download
-    // In production, you would link to actual PDF files
     const link = document.createElement('a')
-    link.href = type === 'brochure' ? '/brochure.pdf' : '/pricing.pdf'
-    link.download = type === 'brochure' ? 'SKA-Divine-Brochure.pdf' : 'SKA-Divine-Pricing.pdf'
+    link.href = type === 'brochure' ? brochurePDF : pricePDF
+    link.download = type === 'brochure' ? 'SKA-Divine-Brochure.pdf' : 'SKA-Divine-Price-2025.pdf'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -299,6 +309,7 @@ function App() {
   }
 
   return (
+    <>
     <div className="w-full overflow-x-hidden">
       <style>{`
         @keyframes fadeSlide {
@@ -447,17 +458,13 @@ function App() {
 
       {/* Gallery Section */}
       <section id="gallery" className="bg-gradient-to-b from-white to-cream py-16 md:py-24" ref={(el) => { sectionsRef.current[2] = el }}>
-        <div className="max-w-6xl mx-auto px-8">
+        <div className="max-w-7xl mx-auto px-8">
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Gallery</h2>
-          <div className="max-w-4xl mx-auto relative">
-            <div className="relative w-full aspect-video rounded-3xl overflow-hidden border-2 border-gold shadow-[0_16px_60px_rgba(46,26,71,0.25),0_0_30px_rgba(212,175,55,0.3)] bg-royal-purple/80">
-              <button 
-                className="absolute top-1/2 left-2 md:left-4 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-royal-purple/80 border-2 border-gold text-gold text-2xl md:text-3xl font-bold cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-sm hover:bg-gold hover:text-royal-purple hover:scale-110 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]" 
-                onClick={prevSlide} 
-                aria-label="Previous slide"
-              >
-                ‹
-              </button>
+          
+          {/* Main Carousel Container */}
+          <div className="relative">
+            {/* Main Image Display */}
+            <div className="relative w-full aspect-[16/10] md:aspect-[16/9] rounded-2xl overflow-hidden mb-8 border-2 border-gold/30 shadow-[0_20px_60px_rgba(46,26,71,0.2)] bg-royal-purple/5">
               <div 
                 className="relative w-full h-full overflow-hidden"
                 onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
@@ -475,94 +482,77 @@ function App() {
                   }
                 }}
               >
-                {galleryItems.map((item, index) => {
-                  const total = galleryItems.length
-                  const offset = (index - currentSlide + total) % total
-                  const style: CSSProperties =
-                    offset === 0
-                      ? { transform: 'translateY(0) scale(1)', opacity: 1, zIndex: 30, filter: 'blur(0px)' }
-                      : offset === 1
-                        ? { transform: 'translateY(26px) scale(0.96)', opacity: 0.55, zIndex: 20, filter: 'blur(1px)' }
-                        : { transform: 'translateY(-30px) scale(0.9)', opacity: 0, zIndex: 5, filter: 'blur(4px)', pointerEvents: 'none' }
-
-                  return (
-                    <div
-                      key={index}
-                      className="absolute top-0 left-0 w-full h-full transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex items-center justify-center rounded-3xl overflow-hidden"
-                      style={style}
-                    >
-                      {item.type === 'video' ? (
-                        <>
-                          <video
-                            ref={(el) => { carouselVideoRefs.current[index] = el }}
-                            className="w-full h-full object-cover block"
-                            src={item.src}
-                            loop
-                            muted
-                            playsInline
-                            onError={(e) => {
-                              const target = e.target as HTMLVideoElement
-                              target.style.display = 'none'
-                              const placeholder = target.nextElementSibling as HTMLElement
-                              if (placeholder) placeholder.style.display = 'flex'
-                            }}
-                          />
-                          <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${item.placeholder === 'interior' ? 'from-deep-purple to-[#5A3C7A]' : 'from-[#1a0f2e] to-deep-purple'} text-gold text-lg md:text-xl lg:text-2xl font-semibold font-heading text-center relative overflow-hidden`} style={{ display: 'none' }}>
-                            {item.title}
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <img
-                            className="w-full h-full object-cover block"
-                            src={item.src}
-                            alt={item.title}
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement
-                              target.style.display = 'none'
-                              const placeholder = target.nextElementSibling as HTMLElement
-                              if (placeholder) placeholder.style.display = 'flex'
-                            }}
-                          />
-                          <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${
-                            item.placeholder === 'exterior' ? 'from-royal-purple to-[#4A2C6A]' :
-                            item.placeholder === 'amenities' ? 'from-[#3A235A] to-royal-purple' :
-                            item.placeholder === 'lobby' ? 'from-royal-purple to-[#2E1A47]' :
-                            item.placeholder === 'kitchen' ? 'from-deep-purple to-[#4A2C6A]' :
-                            'from-royal-purple to-deep-purple'
-                          } text-gold text-lg md:text-xl lg:text-2xl font-semibold font-heading text-center relative overflow-hidden`} style={{ display: 'none' }}>
-                            {item.title}
-                          </div>
-                        </>
-                      )}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-royal-purple/90 to-transparent p-8 text-gold text-center">
-                        <h3 className="font-heading text-lg md:text-xl lg:text-2xl font-semibold m-0 text-shadow-gold">{item.title}</h3>
-                      </div>
-                    </div>
-                  )
-                })}
+                {galleryItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className="absolute top-0 left-0 w-full h-full transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                    style={{
+                      transform: `translateX(${(index - currentSlide) * 100}%)`,
+                      opacity: index === currentSlide ? 1 : 0,
+                      pointerEvents: index === currentSlide ? 'auto' : 'none'
+                    }}
+                  >
+                    <img
+                      className="w-full h-full object-cover"
+                      src={item.src}
+                      alt={item.title}
+                      loading={index === currentSlide ? 'eager' : 'lazy'}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                  </div>
+                ))}
               </div>
+              
+              {/* Navigation Arrows */}
               <button 
-                className="absolute top-1/2 right-2 md:right-4 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-royal-purple/80 border-2 border-gold text-gold text-2xl md:text-3xl font-bold cursor-pointer flex items-center justify-center transition-all duration-300 backdrop-blur-sm hover:bg-gold hover:text-royal-purple hover:scale-110 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]" 
+                className="absolute top-1/2 left-4 md:left-6 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/90 backdrop-blur-md border-2 border-gold text-royal-purple text-2xl md:text-3xl font-bold cursor-pointer flex items-center justify-center transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:bg-gold hover:text-royal-purple hover:scale-110 hover:shadow-[0_6px_30px_rgba(212,175,55,0.4)]" 
+                onClick={prevSlide} 
+                aria-label="Previous slide"
+              >
+                ‹
+              </button>
+              <button 
+                className="absolute top-1/2 right-4 md:right-6 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/90 backdrop-blur-md border-2 border-gold text-royal-purple text-2xl md:text-3xl font-bold cursor-pointer flex items-center justify-center transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:bg-gold hover:text-royal-purple hover:scale-110 hover:shadow-[0_6px_30px_rgba(212,175,55,0.4)]" 
                 onClick={nextSlide} 
                 aria-label="Next slide"
               >
                 ›
               </button>
+
+              {/* Image Counter */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full border border-gold/50 shadow-[0_4px_15px_rgba(0,0,0,0.15)]">
+                <span className="font-heading text-sm md:text-base text-royal-purple">
+                  {currentSlide + 1} / {galleryItems.length}
+                </span>
+              </div>
             </div>
-            <div className="flex justify-center gap-3 mt-8">
-              {galleryItems.map((_, index) => (
-                <button
-                  key={index}
-                  className={`w-3 h-3 rounded-full border-2 border-gold cursor-pointer transition-all duration-300 p-0 ${
-                    index === currentSlide 
-                      ? 'bg-gold shadow-[0_0_10px_rgba(212,175,55,0.6)] scale-[1.3]' 
-                      : 'bg-transparent hover:bg-gold/50 hover:scale-120'
-                  }`}
-                  onClick={() => goToSlide(index)}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
+
+            {/* Thumbnail Strip */}
+            <div className="relative overflow-hidden">
+              <div 
+                className="flex gap-3 md:gap-4 transition-transform duration-500 ease-out"
+                style={{ transform: `translateX(-${currentSlide * (100 / Math.min(galleryItems.length, 8))}%)` }}
+              >
+                {galleryItems.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`flex-shrink-0 w-[calc(12.5%-0.75rem)] md:w-24 h-16 md:h-20 rounded-lg overflow-hidden border-2 transition-all duration-300 cursor-pointer ${
+                      index === currentSlide
+                        ? 'border-gold shadow-[0_4px_20px_rgba(212,175,55,0.4)] scale-105'
+                        : 'border-royal-purple/20 hover:border-gold/50 hover:scale-105 opacity-70 hover:opacity-100'
+                    }`}
+                    aria-label={`View ${item.title}`}
+                  >
+                    <img
+                      className="w-full h-full object-cover"
+                      src={item.src}
+                      alt={item.title}
+                      loading="lazy"
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -658,6 +648,17 @@ function App() {
         </div>
       </section>
 
+            {/* Pricing Section */}
+            <section id="pricing" className="py-12" ref={(el) => { sectionsRef.current[6] = el }}>
+        <div className="max-w-6xl mx-auto px-8">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Pricing</h2>
+          <p className="text-center text-text-light text-sm md:text-base italic mb-4">*Prices are subject to change. Contact us for current rates and availability.</p>
+          <div className="text-center mt-0">
+            <button className="px-8 md:px-10 py-2.5 md:py-3.5 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-sm md:text-base cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)]" onClick={() => openModal('pricing')}>Download Pricing PDF</button>
+          </div>
+        </div>
+      </section>
+
       {/* Location Section */}
       <section className="bg-cream py-16 md:py-24" ref={(el) => { sectionsRef.current[5] = el }}>
         <div className="max-w-6xl mx-auto px-8">
@@ -699,17 +700,6 @@ function App() {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="py-12" ref={(el) => { sectionsRef.current[6] = el }}>
-        <div className="max-w-6xl mx-auto px-8">
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Pricing</h2>
-          <p className="text-center text-text-light text-sm md:text-base italic mb-4">*Prices are subject to change. Contact us for current rates and availability.</p>
-          <div className="text-center mt-0">
-            <button className="px-8 md:px-10 py-2.5 md:py-3.5 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-sm md:text-base cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)]" onClick={() => openModal('pricing')}>Download Pricing PDF</button>
           </div>
         </div>
       </section>
@@ -779,74 +769,7 @@ function App() {
           </form>
 
           {/* Modal for PDF Downloads */}
-          {showModal && (
-            <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-[99999] p-4 animate-[fadeIn_0.3s_ease-out]" onClick={closeModal}>
-              <div className="bg-gradient-to-br from-royal-purple to-deep-purple border-2 border-gold rounded-2xl p-10 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_20px_rgba(212,175,55,0.4)] animate-[slideUp_0.3s_ease-out] scrollbar-hide" onClick={(e) => e.stopPropagation()}>
-                <button className="absolute top-4 right-4 bg-transparent border-2 border-gold text-gold w-9 h-9 rounded-full text-2xl cursor-pointer flex items-center justify-center transition-all duration-300 leading-none p-0 hover:bg-gold hover:text-royal-purple hover:rotate-90" onClick={closeModal}>&times;</button>
-                <h3 className="font-heading text-2xl md:text-3xl text-gold text-center mb-2 tracking-wide">
-                  {modalType === 'brochure' ? 'Download Brochure' : 'Download Pricing PDF'}
-                </h3>
-                <p className="text-center text-soft-gold-glow mb-6 md:mb-8 text-sm md:text-base">Please fill in your details to download</p>
-                <form className="flex flex-col gap-6" onSubmit={handleModalSubmit} noValidate>
-                  <div className="w-full relative">
-                    <input
-                      type="text"
-                      name="name"
-                      placeholder="Your Name *"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 ${
-                        formErrors.name ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
-                      }`}
-                    />
-                    {formErrors.name && <span className="block text-red-300 text-sm mt-2 italic">{formErrors.name}</span>}
-                  </div>
-                  <div className="w-full relative">
-                    <input
-                      type="tel"
-                      name="phone"
-                      placeholder="Phone Number *"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 ${
-                        formErrors.phone ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
-                      }`}
-                    />
-                    {formErrors.phone && <span className="block text-red-300 text-sm mt-2 italic">{formErrors.phone}</span>}
-                  </div>
-                  <div className="w-full relative">
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Email Address *"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 ${
-                        formErrors.email ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
-                      }`}
-                    />
-                    {formErrors.email && <span className="block text-red-300 text-sm mt-2 italic">{formErrors.email}</span>}
-                  </div>
-                  <div className="w-full relative">
-                    <textarea
-                      name="message"
-                      placeholder="Your Message (Optional)"
-                      value={formData.message}
-                      onChange={handleChange}
-                      rows={4}
-                      className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 min-h-[120px] leading-relaxed ${
-                        formErrors.message ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
-                      }`}
-                    />
-                    {formErrors.message && <span className="block text-red-300 text-sm mt-2 italic">{formErrors.message}</span>}
-                  </div>
-                  <button type="submit" className="px-8 md:px-10 py-3 md:py-4 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-base md:text-lg cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)] disabled:opacity-50 disabled:cursor-not-allowed" disabled={isSubmitting}>
-                    {isSubmitting ? 'Processing...' : 'Download'}
-                  </button>
-                </form>
-              </div>
-            </div>
-          )}
+         
         </div>
       </section>
 
@@ -860,8 +783,8 @@ function App() {
             </div>
             <div>
               <h4 className="font-heading text-lg md:text-xl mb-4 md:mb-6 text-soft-gold-glow">Contact</h4>
-              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">📞 +91 98765 43210</p>
-              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">✉️ info@skadivine.com</p>
+              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">📞 +91 9910101081</p>
+              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">✉️ yashsangwan122@gmail.com</p>
               <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">📍 Prime Downtown, City</p>
             </div>
       <div>
@@ -935,7 +858,79 @@ function App() {
           </div>
         </div>
       )}
+      
       </div>
+
+      {showModal && (
+            <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-[999999] p-4 animate-[fadeIn_0.3s_ease-out] h-screen" onClick={closeModal}>
+              <div className="bg-gradient-to-br from-royal-purple to-deep-purple border-2 border-gold rounded-2xl p-10 max-w-lg w-full max-h-[90vh] overflow-y-auto relative shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_20px_rgba(212,175,55,0.4)] animate-[slideUp_0.3s_ease-out] scrollbar-hide" onClick={(e) => e.stopPropagation()}>
+                <button className="absolute top-4 right-4 bg-transparent border-2 border-gold text-gold w-9 h-9 rounded-full text-2xl cursor-pointer flex items-center justify-center transition-all duration-300 leading-none p-0 hover:bg-gold hover:text-royal-purple hover:rotate-90" onClick={closeModal}>&times;</button>
+                <h3 className="font-heading text-2xl md:text-3xl text-gold text-center mb-2 tracking-wide">
+                  {modalType === 'brochure' ? 'Download Brochure' : 'Download Pricing PDF'}
+                </h3>
+                <p className="text-center text-soft-gold-glow mb-6 md:mb-8 text-sm md:text-base">Please fill in your details to download</p>
+                <form className="flex flex-col gap-6" onSubmit={handleModalSubmit} noValidate>
+                  <div className="w-full relative">
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Your Name *"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 ${
+                        formErrors.name ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
+                      }`}
+                    />
+                    {formErrors.name && <span className="block text-red-300 text-sm mt-2 italic">{formErrors.name}</span>}
+                  </div>
+                  <div className="w-full relative">
+                    <input
+                      type="tel"
+                      name="phone"
+                      placeholder="Phone Number *"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 ${
+                        formErrors.phone ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
+                      }`}
+                    />
+                    {formErrors.phone && <span className="block text-red-300 text-sm mt-2 italic">{formErrors.phone}</span>}
+                  </div>
+                  <div className="w-full relative">
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Email Address *"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 ${
+                        formErrors.email ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
+                      }`}
+                    />
+                    {formErrors.email && <span className="block text-red-300 text-sm mt-2 italic">{formErrors.email}</span>}
+                  </div>
+                  <div className="w-full relative">
+                    <textarea
+                      name="message"
+                      placeholder="Your Message (Optional)"
+                      value={formData.message}
+                      onChange={handleChange}
+                      rows={4}
+                      className={`w-full px-4 py-4 border-2 rounded-lg bg-cream text-royal-purple text-base font-body transition-all duration-300 min-h-[120px] leading-relaxed ${
+                        formErrors.message ? 'border-red-500 shadow-[0_0_0_3px_rgba(239,68,68,0.2)]' : 'border-gold focus:border-gold focus:shadow-[0_0_0_3px_rgba(212,175,55,0.2),0_0_20px_rgba(212,175,55,0.4)] focus:bg-white'
+                      }`}
+                    />
+                    {formErrors.message && <span className="block text-red-300 text-sm mt-2 italic">{formErrors.message}</span>}
+                  </div>
+                  <button type="submit" className="px-8 md:px-10 py-3 md:py-4 bg-gold text-royal-purple border-2 border-gold rounded-lg font-heading font-semibold text-base md:text-lg cursor-pointer shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 tracking-wide relative overflow-hidden hover:bg-deep-purple hover:text-gold hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(212,175,55,0.6),0_4px_15px_rgba(0,0,0,0.3)] disabled:opacity-50 disabled:cursor-not-allowed" disabled={isSubmitting}>
+                    {isSubmitting ? 'Processing...' : 'Download'}
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+      </>
+
   )
 }
 
