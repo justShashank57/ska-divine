@@ -903,8 +903,7 @@ function App() {
             </div>
             <div>
               <h4 className="font-heading text-lg md:text-xl mb-4 md:mb-6 text-soft-gold-glow">Contact</h4>
-              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">📞 +91 9910101081</p>
-              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">✉️ yashsangwan122@gmail.com</p>
+              <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">📞 +91 8700154680</p>
               <p className="text-white/85 mb-3 leading-relaxed text-sm md:text-base">📍 Prime Downtown, City</p>
             </div>
       <div>
