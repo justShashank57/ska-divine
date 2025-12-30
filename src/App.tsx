@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, type CSSProperties } from 'react'
+import emailjs from '@emailjs/browser'
 import skaIntroVideo from './assets/skaIntro.mp4'
 import amenity1 from './assets/amenities/1.png'
 import amenity2 from './assets/amenities/2.png'
@@ -224,19 +225,24 @@ function App() {
   }
 
   const sendEmail = async (data: typeof formData, type: 'contact' | 'brochure' | 'pricing') => {
-    const subject = type === 'contact' 
-      ? 'Contact Form Submission - SKA Divine'
-      : type === 'brochure'
-      ? 'Brochure Download Request - SKA Divine'
-      : 'Pricing PDF Download Request - SKA Divine'
-    
-    const body = `Name: ${data.name}%0D%0A` +
-                 `Phone: ${data.phone}%0D%0A` +
-                 `Email: ${data.email}%0D%0A` +
-                 (data.message ? `Message: ${data.message}%0D%0A` : '') +
-                 `%0D%0ARequest Type: ${type === 'contact' ? 'Contact Form' : type === 'brochure' ? 'Brochure Download' : 'Pricing PDF Download'}`
-    
-    window.location.href = `mailto:kshashank659@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`
+    const templateParams = {
+      from_name: data.name,
+      email_id: data.email,
+      phone_number: data.phone,
+      message: data.message || ''
+    }
+
+    try {
+      await emailjs.send(
+        'service_aaa8luj',
+        'template_49qje2t',
+        templateParams,
+        'Gij9riEgS7KzS2Gsx'
+      )
+    } catch (error) {
+      console.error('EmailJS error:', error)
+      throw error
+    }
   }
 
   const downloadPDF = (type: 'brochure' | 'pricing') => {
@@ -351,7 +357,7 @@ function App() {
           <div className="grid grid-cols-2 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 md:gap-8 mb-12 p-6 md:p-10 bg-royal-purple/75 backdrop-blur-[20px] rounded-2xl border-2 border-gold/50 shadow-[0_8px_32px_rgba(0,0,0,0.5),0_0_20px_rgba(212,175,55,0.4)]">
             <div className="flex flex-col gap-2">
               <span className="text-xs md:text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">Price Range</span>
-              <span className="text-base md:text-lg lg:text-xl font-semibold text-gold font-heading">₹1.2 Cr - ₹2.5 Cr</span>
+              <span className="text-base md:text-lg lg:text-xl font-semibold text-gold font-heading">₹1.6 Cr - ₹2.5 Cr</span>
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-xs md:text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">Location</span>
@@ -363,7 +369,7 @@ function App() {
             </div>
             <div className="flex flex-col gap-2">
               <span className="text-xs md:text-sm opacity-85 uppercase tracking-widest text-soft-gold-glow font-heading">Possession</span>
-              <span className="text-base md:text-lg lg:text-xl font-semibold text-gold font-heading">Q2 2025</span>
+              <span className="text-base md:text-lg lg:text-xl font-semibold text-gold font-heading">mid 2028</span>
             </div>
           </div>
           <div className="flex gap-6 justify-center flex-wrap">
