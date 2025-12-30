@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, type CSSProperties } from 'react'
+import { createPortal } from 'react-dom'
 import emailjs from '@emailjs/browser'
 import skaIntroVideo from './assets/skaIntro.mp4'
+import consUpdateVideo from './assets/cons_update.MP4'
 import amenity1 from './assets/amenities/1.png'
 import amenity2 from './assets/amenities/2.png'
 import amenity3 from './assets/amenities/3.png'
@@ -25,6 +27,10 @@ import gallery5 from './assets/gallery/gallery-5.jpg'
 import gallery6 from './assets/gallery/gallery-6.jpg'
 import gallery7 from './assets/gallery/gallery-7.jpg'
 import gallery8 from './assets/gallery/gallery-8.jpg'
+import gallery9 from './assets/gallery/gallery-9.png'
+import gallery10 from './assets/gallery/gallery-10.png'
+import gallery11 from './assets/gallery/gallery-11.png'
+import gallery12 from './assets/gallery/gallery-12.png'
 
 function App() {
   const [formData, setFormData] = useState({
@@ -48,8 +54,12 @@ function App() {
   const [touchEnd, setTouchEnd] = useState(0)
   const [showFloorPlans, setShowFloorPlans] = useState(true)
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null)
+  const [showBankTooltip, setShowBankTooltip] = useState(false)
+  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, right: 0 })
+  const tooltipButtonRef = useRef<HTMLDivElement>(null)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
   const videoRef = useRef<HTMLVideoElement>(null)
+  const consUpdateVideoRef = useRef<HTMLVideoElement>(null)
 
   // Gallery items - using 8 gallery images
   const galleryItems = [
@@ -61,6 +71,10 @@ function App() {
     { type: 'image', src: gallery6, title: 'Gallery View 6' },
     { type: 'image', src: gallery7, title: 'Gallery View 7' },
     { type: 'image', src: gallery8, title: 'Gallery View 8' },
+    { type: 'image', src: gallery9, title: 'Gallery View 9' },
+    { type: 'image', src: gallery10, title: 'Gallery View 10' },
+    { type: 'image', src: gallery11, title: 'Gallery View 11' },
+    { type: 'image', src: gallery12, title: 'Gallery View 12' },
   ]
 
   const nextSlide = () => {
@@ -124,11 +138,16 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Ensure video plays
+  // Ensure videos play
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.play().catch((error) => {
         console.log('Video autoplay prevented:', error)
+      })
+    }
+    if (consUpdateVideoRef.current) {
+      consUpdateVideoRef.current.play().catch((error) => {
+        console.log('Construction update video autoplay prevented:', error)
       })
     }
   }, [])
@@ -390,7 +409,7 @@ function App() {
             Why Choose SKA DIVINE?
           </h2>
           <p className="text-center text-text-light max-w-3xl mx-auto mb-12 md:mb-16 text-base md:text-lg">
-            Minimal, design-forward living with substance to match: curated residences, certified safety, and a campus built for everyday ease.
+          Luxury 3BHK/4BHK Apartments in Ghaziabad - New Launch Residential Project | Best Investment Property in NH-24 Ghaziabad | EV Charging Apartments
           </p>
           <div className="space-y-10 md:space-y-14">
             {[
@@ -400,7 +419,7 @@ function App() {
                   { title: 'Residence Mix', desc: '3/4BHK luxurious apartments.' },
                   { title: 'Regulatory Clarity', desc: 'UP RERA No. UPRERAPRJ556045/10/2024.' },
                   { title: 'Land Canvas', desc: 'Spread over approx 5 acres.' },
-                  { title: 'Trust & Finance', desc: 'SBI approved project.' },
+                  { title: 'Trust & Finance', desc: 'Land approved by leading banks & NBFCs.' },
                   { title: 'Skyline', desc: '3 majestic towers, 27 storeys high.' },
                 ],
               },
@@ -408,10 +427,11 @@ function App() {
                 image: info2,
                 items: [
                   { title: 'Lifestyle Volume', desc: '1,26,000 sq. ft. club, landscaping & swimming pool.' },
-                  { title: 'Connected Living', desc: 'Seamless connectivity to Delhi NCR.' },
+                  { title: 'Connected Living', desc: 'Seamless connectivity via Delhi-Meerut Expressway.' },
                   { title: 'Sustainability', desc: 'Pre-certified platinum-rated green township.' },
                   { title: 'Structural Assurance', desc: 'Earthquake-resistant frame structure.' },
-                  { title: 'Timeline', desc: 'Possession August 2029.' },
+                  { title: 'Society Shops', desc: '13 society double story shops with 23ft ceiling height.' },
+                  { title: 'Timeline', desc: 'Possession Mid August 2028.' },
                 ],
               },
             ].map((row, rowIdx) => (
@@ -436,6 +456,8 @@ function App() {
                     const textStyle: CSSProperties = {
                       animation: `fadeSlide 0.45s ease-out ${idx * 80}ms both`
                     }
+                    const isTrustFinance = item.title === 'Trust & Finance'
+                    const banks = ['SBI', 'ICICI', 'HDFC', 'PNB', 'BOB', 'CANARA', 'NBFC', 'AXIS']
                     return (
                       <div
                         key={idx}
@@ -448,9 +470,67 @@ function App() {
                           <span className="font-heading text-sm tracking-[0.18em] uppercase text-royal-purple">
                             {item.title}
                           </span>
-                          <p className="font-body text-base md:text-lg text-royal-purple leading-relaxed sm:text-right">
-                            {item.desc}
-                          </p>
+                          <div className="relative flex items-center gap-2 sm:text-right">
+                            <p className="font-body text-base md:text-lg text-royal-purple leading-relaxed">
+                              {item.desc.replace(/\?/g, '')}
+                            </p>
+                            {isTrustFinance && (
+                              <div 
+                                ref={tooltipButtonRef}
+                                className="relative"
+                                onMouseEnter={() => {
+                                  if (tooltipButtonRef.current) {
+                                    const rect = tooltipButtonRef.current.getBoundingClientRect()
+                                    setTooltipPosition({
+                                      top: rect.bottom + 8,
+                                      right: window.innerWidth - rect.right
+                                    })
+                                    setShowBankTooltip(true)
+                                  }
+                                }}
+                                onMouseLeave={() => setShowBankTooltip(false)}
+                                onTouchStart={() => {
+                                  if (tooltipButtonRef.current) {
+                                    const rect = tooltipButtonRef.current.getBoundingClientRect()
+                                    setTooltipPosition({
+                                      top: rect.bottom + 8,
+                                      right: window.innerWidth - rect.right
+                                    })
+                                    setShowBankTooltip(!showBankTooltip)
+                                  }
+                                }}
+                              >
+                                <button
+                                  className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gold text-royal-purple flex items-center justify-center text-xs md:text-sm font-bold cursor-pointer hover:bg-royal-purple hover:text-gold transition-all duration-300 shadow-[0_2px_8px_rgba(212,175,55,0.4)] hover:scale-110"
+                                  aria-label="View approved banks"
+                                >
+                                  ?
+                                </button>
+                                {showBankTooltip && typeof document !== 'undefined' && createPortal(
+                                  <div 
+                                    className="fixed z-[100000] bg-gradient-to-br from-royal-purple to-deep-purple border-2 border-gold rounded-lg p-4 shadow-[0_10px_40px_rgba(46,26,71,0.3),0_0_15px_rgba(212,175,55,0.4)] min-w-[200px] md:min-w-[250px] animate-[slideUp_0.2s_ease-out]"
+                                    style={{
+                                      top: `${tooltipPosition.top}px`,
+                                      right: `${tooltipPosition.right}px`
+                                    }}
+                                    onMouseEnter={() => setShowBankTooltip(true)}
+                                    onMouseLeave={() => setShowBankTooltip(false)}
+                                  >
+                                    <h5 className="font-heading text-sm md:text-base text-gold mb-3 font-semibold">Approved Banks & NBFCs:</h5>
+                                    <ul className="list-none space-y-1.5">
+                                      {banks.map((bank, bankIdx) => (
+                                        <li key={bankIdx} className="text-soft-gold-glow text-sm md:text-base font-body flex items-center gap-2">
+                                          <span className="text-gold">•</span>
+                                          {bank}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>,
+                                  document.body
+                                )}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     )
@@ -665,8 +745,42 @@ function App() {
         </div>
       </section>
 
-      {/* Location Section */}
+      {/* Construction Update Section */}
       <section className="bg-cream py-16 md:py-24" ref={(el) => { sectionsRef.current[5] = el }}>
+        <div className="max-w-6xl mx-auto px-8">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-6 md:mb-8 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">
+            Construction Update
+          </h2>
+          <div className="mb-8 md:mb-12 text-center max-w-4xl mx-auto">
+            <p className="font-body text-base md:text-lg lg:text-xl text-text-light leading-relaxed mb-4">
+              Witness the transformation of your dream home taking shape. Our commitment to excellence is reflected in every detail of construction, ensuring quality and precision at every stage.
+            </p>
+            <p className="font-body text-sm md:text-base text-text-light leading-relaxed italic">
+              Experience the journey of SKA DIVINE coming to life, where luxury meets craftsmanship.
+            </p>
+          </div>
+          <div className="w-full rounded-2xl overflow-hidden border-2 border-gold shadow-[0_10px_40px_rgba(46,26,71,0.25),0_0_15px_rgba(212,175,55,0.3)] bg-royal-purple/5">
+            <div className="relative w-full aspect-video bg-royal-purple/10">
+              <video
+                ref={consUpdateVideoRef}
+                className="w-full h-full object-cover"
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+              >
+                <source src={consUpdateVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Location Section */}
+      <section className="bg-cream py-16 md:py-24" ref={(el) => { sectionsRef.current[6] = el }}>
         <div className="max-w-6xl mx-auto px-8">
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-12 md:mb-16 text-royal-purple tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent after:shadow-[0_0_20px_rgba(212,175,55,0.4)]">Location</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
@@ -711,7 +825,7 @@ function App() {
       </section>
 
       {/* Contact Form Section */}
-      <section id="contact" className="bg-gradient-to-br from-[#1a0f2e] via-royal-purple to-deep-purple text-white relative overflow-hidden py-16 md:py-24" ref={(el) => { sectionsRef.current[7] = el }}>
+      <section id="contact" className="bg-gradient-to-br from-[#1a0f2e] via-royal-purple to-deep-purple text-white relative overflow-hidden py-16 md:py-24" ref={(el) => { sectionsRef.current[8] = el }}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(212,175,55,0.08)_0%,transparent_50%),radial-gradient(circle_at_80%_70%,rgba(244,223,165,0.06)_0%,transparent_50%)] pointer-events-none"></div>
         <div className="max-w-6xl mx-auto px-8 relative z-[1]">
           <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-center mb-4 text-gold relative z-[1] tracking-wide relative pb-4 md:pb-6 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-0.5 after:bg-gradient-to-r after:from-transparent after:via-gold after:to-transparent">Get in Touch</h2>
