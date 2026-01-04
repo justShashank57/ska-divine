@@ -244,6 +244,7 @@ function App() {
   }
 
   const sendEmail = async (data: typeof formData, type: 'contact' | 'brochure' | 'pricing') => {
+    console.log("form type: ",type);
     const templateParams = {
       from_name: data.name,
       email_id: data.email,
