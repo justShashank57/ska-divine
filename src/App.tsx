@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import skaIntroVideo from "./assets/skaIntro.mp4";
 import phoneBGVideo from "./assets/phoneBG.mp4";
@@ -33,7 +34,8 @@ import gallery10 from "./assets/gallery/gallery-10.png";
 import gallery11 from "./assets/gallery/gallery-11.png";
 import gallery12 from "./assets/gallery/gallery-12.png";
 
-function App() {
+function Home() {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -161,6 +163,21 @@ function App() {
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
+
+  // Route-based scroll handler
+  useEffect(() => {
+    const pathname = location.pathname;
+    if (pathname === "/") return;
+
+    const sectionId = pathname.slice(1); // Remove leading slash
+    const section = document.getElementById(sectionId);
+
+    if (section) {
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }, [location.pathname]);
 
   // Ensure videos play and reload when source changes
   useEffect(() => {
@@ -431,7 +448,7 @@ function App() {
                   Location
                 </span>
                 <span className="text-base md:text-lg lg:text-xl font-semibold text-gold font-heading">
-                  Prime Downtown
+                  Wave City GZBD
                 </span>
               </div>
               <div className="flex flex-col gap-2">
@@ -1455,6 +1472,18 @@ function App() {
         </div>
       )}
     </>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/amenities" element={<Home />} />
+      <Route path="/location" element={<Home />} />
+      <Route path="/floorplans" element={<Home />} />
+      <Route path="/contact" element={<Home />} />
+    </Routes>
   );
 }
 
