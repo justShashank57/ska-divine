@@ -1,7 +1,10 @@
-import { useState, useEffect, useRef, type CSSProperties } from "react";
+import { useState, useEffect, useRef, type CSSProperties, useMemo, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser";
+import ThanksPage from "./ThanksPage";
+import { debounce, throttle } from "./utils/debounce";
+import { useVideoOptimization, getVideoPreloadStrategy } from "./utils/videoOptimization";
 import skaIntroVideo from "./assets/skaIntro.mp4";
 import phoneBGVideo from "./assets/phoneBG.mp4";
 import consUpdateVideo from "./assets/cons_update.MP4";
@@ -36,6 +39,7 @@ import gallery12 from "./assets/gallery/gallery-12.png";
 
 function Home() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -62,13 +66,28 @@ function Home() {
   const [showBankTooltip, setShowBankTooltip] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, right: 0 });
   const [isMobile, setIsMobile] = useState(false);
-  const tooltipButtonRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const consUpdateVideoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const consUpdateVideoRef = useRef<HTMLVideoElement | null>(null);
+  const tooltipButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Gallery items - using 8 gallery images
-  const galleryItems = [
+  // Video optimization hooks
+  const heroVideoOptimization = useVideoOptimization({
+    videoRef,
+    autoPlay: true,
+    observerThreshold: 0.5,
+  });
+
+  const consVideoOptimization = useVideoOptimization({
+    videoRef: consUpdateVideoRef,
+    autoPlay: false, // Don't auto-play construction update video
+    observerThreshold: 0.3,
+  });
+
+  const heroVideoPreload = getVideoPreloadStrategy(isMobile, true); // Hero is above-the-fold
+
+  // Memoized gallery items to prevent recreation on every render
+  const galleryItems = useMemo(() => [
     { type: "image", src: gallery1, title: "Gallery View 1" },
     { type: "image", src: gallery2, title: "Gallery View 2" },
     { type: "image", src: gallery3, title: "Gallery View 3" },
@@ -81,23 +100,23 @@ function Home() {
     { type: "image", src: gallery10, title: "Gallery View 10" },
     { type: "image", src: gallery11, title: "Gallery View 11" },
     { type: "image", src: gallery12, title: "Gallery View 12" },
-  ];
+  ], []);
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentSlide((prev) =>
       prev === galleryItems.length - 1 ? 0 : prev + 1
     );
-  };
+  }, [galleryItems.length]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setCurrentSlide((prev) =>
       prev === 0 ? galleryItems.length - 1 : prev - 1
     );
-  };
+  }, [galleryItems.length]);
 
-  const goToSlide = (index: number) => {
+  const goToSlide = useCallback((index: number) => {
     setCurrentSlide(index);
-  };
+  }, []);
 
   useEffect(() => {
     if (showModal) {
@@ -140,29 +159,40 @@ function Home() {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [galleryItems.length]);
 
-  // Handle scroll for sticky button
+  // Handle scroll for sticky button with throttle
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = throttle(() => {
       const scrollPosition = window.scrollY;
       setIsScrolled(scrollPosition > 300);
-    };
+    }, 100);
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Detect screen size for video selection
+  // Detect screen size for video selection with debounce
   useEffect(() => {
-    const checkScreenSize = () => {
+    const checkScreenSize = debounce(() => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-      console.log("Screen width:", window.innerWidth, "isMobile:", mobile);
-    };
+    }, 250);
 
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
+
+  // Video playback optimization - Only called once on mount
+  useEffect(() => {
+    if (videoRef.current) {
+      // Video will be auto-played by Intersection Observer
+      videoRef.current.load();
+    }
+    if (consUpdateVideoRef.current) {
+      // Construction video loads metadata only
+      consUpdateVideoRef.current.load();
+    }
+  }, [isMobile]);
 
   // Route-based scroll handler
   useEffect(() => {
@@ -178,21 +208,6 @@ function Home() {
       }, 100);
     }
   }, [location.pathname]);
-
-  // Ensure videos play and reload when source changes
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.load();
-      videoRef.current.play().catch((error) => {
-        console.log("Video autoplay prevented:", error);
-      });
-    }
-    if (consUpdateVideoRef.current) {
-      consUpdateVideoRef.current.play().catch((error) => {
-        console.log("Construction update video autoplay prevented:", error);
-      });
-    }
-  }, [isMobile]);
 
   // Intersection Observer for scroll animations
   useEffect(() => {
@@ -224,14 +239,14 @@ function Home() {
     };
   }, []);
 
-  const scrollToContact = () => {
+  const scrollToContact = useCallback(() => {
     const contactSection = document.getElementById("contact");
     if (contactSection) {
       contactSection.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  };
+  }, []);
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const errors = {
       name: "",
       phone: "",
@@ -264,56 +279,55 @@ function Home() {
       isValid = false;
     }
 
-    // Message is optional, no validation needed
-
     setFormErrors(errors);
     return isValid;
-  };
+  }, [formData]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-    // Clear error when user starts typing
-    if (formErrors[name as keyof typeof formErrors]) {
-      setFormErrors({
-        ...formErrors,
-        [name]: "",
-      });
-    }
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+      // Clear error when user starts typing
+      if (formErrors[name as keyof typeof formErrors]) {
+        setFormErrors((prev) => ({
+          ...prev,
+          [name]: "",
+        }));
+      }
+    },
+    [formErrors]
+  );
 
-  const sendEmail = async (
-    data: typeof formData,
-    type: "contact" | "brochure" | "pricing"
-  ) => {
-    console.log("form type: ", type);
-    const templateParams = {
-      from_name: data.name,
-      email_id: data.email,
-      phone_number: data.phone,
-      message: data.message || "",
-    };
+  const sendEmail = useCallback(
+    async (
+      data: typeof formData,
+      _type: "contact" | "brochure" | "pricing"
+    ) => {
+      const templateParams = {
+        from_name: data.name,
+        email_id: data.email,
+        phone_number: data.phone,
+        message: data.message || "",
+      };
 
-    try {
-      await emailjs.send(
-        "service_aaa8luj",
-        "template_49qje2t",
-        templateParams,
-        "Gij9riEgS7KzS2Gsx"
-      );
-    } catch (error) {
-      console.error("EmailJS error:", error);
-      throw error;
-    }
-  };
+      try {
+        await emailjs.send(
+          "service_aaa8luj",
+          "template_49qje2t",
+          templateParams,
+          "Gij9riEgS7KzS2Gsx"
+        );
+      } catch (error) {
+        throw error;
+      }
+    },
+    []
+  );
 
-  const downloadPDF = (type: "brochure" | "pricing") => {
-    // Create a temporary link to trigger download
+  const downloadPDF = useCallback((type: "brochure" | "pricing") => {
     const link = document.createElement("a");
     link.href = type === "brochure" ? brochurePDF : pricePDF;
     link.download =
@@ -323,66 +337,72 @@ function Home() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+      if (!validateForm()) {
+        return;
+      }
 
-    setIsSubmitting(true);
+      setIsSubmitting(true);
 
-    try {
-      await sendEmail(formData, "contact");
-      alert("Thank you! We will contact you soon.");
-      setFormData({ name: "", phone: "", email: "", message: "" });
-      setFormErrors({ name: "", phone: "", email: "", message: "" });
-    } catch (error) {
-      alert("There was an error submitting the form. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleModalSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      if (modalType) {
-        await sendEmail(formData, modalType);
-        downloadPDF(modalType);
-        setShowModal(false);
-        setModalType(null);
+      try {
+        await sendEmail(formData, "contact");
         setFormData({ name: "", phone: "", email: "", message: "" });
         setFormErrors({ name: "", phone: "", email: "", message: "" });
-        alert("Thank you! Your download will begin shortly.");
+        navigate("/thanks");
+      } catch (error) {
+        alert("There was an error submitting the form. Please try again.");
+      } finally {
+        setIsSubmitting(false);
       }
-    } catch (error) {
-      alert("There was an error. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    },
+    [formData, validateForm, navigate]
+  );
 
-  const openModal = (type: "brochure" | "pricing") => {
+  const handleModalSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+
+      if (!validateForm()) {
+        return;
+      }
+
+      setIsSubmitting(true);
+
+      try {
+        if (modalType) {
+          await sendEmail(formData, modalType);
+          downloadPDF(modalType);
+          setShowModal(false);
+          setModalType(null);
+          setFormData({ name: "", phone: "", email: "", message: "" });
+          setFormErrors({ name: "", phone: "", email: "", message: "" });
+          alert("Thank you! Your download will begin shortly.");
+        }
+      } catch (error) {
+        alert("There was an error. Please try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [formData, modalType, validateForm]
+  );
+
+  const openModal = useCallback((type: "brochure" | "pricing") => {
     setModalType(type);
     setShowModal(true);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setShowModal(false);
     setModalType(null);
     setFormData({ name: "", phone: "", email: "", message: "" });
     setFormErrors({ name: "", phone: "", email: "", message: "" });
-  };
+  }, []);
 
   return (
     <>
@@ -417,12 +437,15 @@ function Home() {
             key={isMobile ? "phone" : "desktop"}
             ref={videoRef}
             className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0 brightness-[0.9] contrast-[1.1] saturate-[1.1] pointer-events-none backface-hidden will-change-transform opacity-70 md:opacity-70 opacity-65"
-            autoPlay
+            autoPlay={false}
             loop
             muted
             playsInline
+            preload={heroVideoPreload}
+            onError={heroVideoOptimization.handleVideoError}
           >
             <source src={isMobile ? phoneBGVideo : skaIntroVideo} type="video/mp4" />
+            Your browser does not support the video tag.
           </video>
           {/* Gold particles effect */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(212,175,55,0.1)_0%,transparent_50%),radial-gradient(circle_at_80%_70%,rgba(244,223,165,0.08)_0%,transparent_50%),radial-gradient(circle_at_50%_50%,rgba(212,175,55,0.05)_0%,transparent_50%)] pointer-events-none z-[1]"></div>
@@ -609,36 +632,34 @@ function Home() {
                                 {item.desc.replace(/\?/g, "")}
                               </p>
                               {isTrustFinance && (
-                                <div
-                                  ref={tooltipButtonRef}
-                                  className="relative"
-                                  onMouseEnter={() => {
-                                    if (tooltipButtonRef.current) {
-                                      const rect =
-                                        tooltipButtonRef.current.getBoundingClientRect();
-                                      setTooltipPosition({
-                                        top: rect.bottom + 8,
-                                        right: window.innerWidth - rect.right,
-                                      });
-                                      setShowBankTooltip(true);
-                                    }
-                                  }}
-                                  onMouseLeave={() => setShowBankTooltip(false)}
-                                  onTouchStart={() => {
-                                    if (tooltipButtonRef.current) {
-                                      const rect =
-                                        tooltipButtonRef.current.getBoundingClientRect();
-                                      setTooltipPosition({
-                                        top: rect.bottom + 8,
-                                        right: window.innerWidth - rect.right,
-                                      });
-                                      setShowBankTooltip(!showBankTooltip);
-                                    }
-                                  }}
-                                >
+                                <div className="relative">
                                   <button
+                                    ref={tooltipButtonRef}
                                     className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-gold text-royal-purple flex items-center justify-center text-xs md:text-sm font-bold cursor-pointer hover:bg-royal-purple hover:text-gold transition-all duration-300 shadow-[0_2px_8px_rgba(212,175,55,0.4)] hover:scale-110"
                                     aria-label="View approved banks"
+                                    onMouseEnter={() => {
+                                      if (tooltipButtonRef.current) {
+                                        const rect =
+                                          tooltipButtonRef.current.getBoundingClientRect();
+                                        setTooltipPosition({
+                                          top: rect.bottom + 8,
+                                          right: window.innerWidth - rect.right,
+                                        });
+                                        setShowBankTooltip(true);
+                                      }
+                                    }}
+                                    onMouseLeave={() => setShowBankTooltip(false)}
+                                    onTouchStart={() => {
+                                      if (tooltipButtonRef.current) {
+                                        const rect =
+                                          tooltipButtonRef.current.getBoundingClientRect();
+                                        setTooltipPosition({
+                                          top: rect.bottom + 8,
+                                          right: window.innerWidth - rect.right,
+                                        });
+                                        setShowBankTooltip(!showBankTooltip);
+                                      }
+                                    }}
                                   >
                                     ?
                                   </button>
@@ -1015,10 +1036,11 @@ function Home() {
                   ref={consUpdateVideoRef}
                   className="w-full h-full object-cover"
                   controls
-                  autoPlay
                   loop
                   muted
                   playsInline
+                  preload="metadata"
+                  onError={consVideoOptimization.handleVideoError}
                 >
                   <source src={consUpdateVideo} type="video/mp4" />
                   Your browser does not support the video tag.
@@ -1479,6 +1501,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/thanks" element={<ThanksPage />} />
       <Route path="/amenities" element={<Home />} />
       <Route path="/location" element={<Home />} />
       <Route path="/floorplans" element={<Home />} />
