@@ -5,37 +5,6 @@ import emailjs from "@emailjs/browser";
 import ThanksPage from "./ThanksPage";
 import { debounce, throttle } from "./utils/debounce";
 import { useVideoOptimization, getVideoPreloadStrategy } from "./utils/videoOptimization";
-import skaIntroVideo from "./assets/skaIntro.mp4";
-import phoneBGVideo from "./assets/phoneBG.mp4";
-import consUpdateVideo from "./assets/cons_update.MP4";
-import amenity1 from "./assets/amenities/1.png";
-import amenity2 from "./assets/amenities/2.png";
-import amenity3 from "./assets/amenities/3.png";
-import amenity4 from "./assets/amenities/4.png";
-import amenity5 from "./assets/amenities/5.png";
-import amenity6 from "./assets/amenities/6.png";
-import amenity7 from "./assets/amenities/7.png";
-import amenity8 from "./assets/amenities/8.png";
-import sitemap from "./assets/floor_sitemap/sitemap.png";
-import floorPlan1 from "./assets/floor_sitemap/1.png";
-import floorPlan2 from "./assets/floor_sitemap/2.png";
-import floorPlan3 from "./assets/floor_sitemap/3.png";
-import info from "./assets/gallery/info.png";
-import info2 from "./assets/gallery/about.jpg";
-import brochurePDF from "./assets/brochure.pdf";
-import pricePDF from "./assets/price_2025.pdf";
-import gallery1 from "./assets/gallery/gallery-1.jpg";
-import gallery2 from "./assets/gallery/gallery-2.jpg";
-import gallery3 from "./assets/gallery/gallery-3.jpg";
-import gallery4 from "./assets/gallery/gallery-4.jpg";
-import gallery5 from "./assets/gallery/gallery-5.jpg";
-import gallery6 from "./assets/gallery/gallery-6.jpg";
-import gallery7 from "./assets/gallery/gallery-7.jpg";
-import gallery8 from "./assets/gallery/gallery-8.jpg";
-import gallery9 from "./assets/gallery/gallery-9.png";
-import gallery10 from "./assets/gallery/gallery-10.png";
-import gallery11 from "./assets/gallery/gallery-11.png";
-import gallery12 from "./assets/gallery/gallery-12.png";
 
 function Home() {
   const location = useLocation();
@@ -88,18 +57,18 @@ function Home() {
 
   // Memoized gallery items to prevent recreation on every render
   const galleryItems = useMemo(() => [
-    { type: "image", src: gallery1, title: "Gallery View 1" },
-    { type: "image", src: gallery2, title: "Gallery View 2" },
-    { type: "image", src: gallery3, title: "Gallery View 3" },
-    { type: "image", src: gallery4, title: "Gallery View 4" },
-    { type: "image", src: gallery5, title: "Gallery View 5" },
-    { type: "image", src: gallery6, title: "Gallery View 6" },
-    { type: "image", src: gallery7, title: "Gallery View 7" },
-    { type: "image", src: gallery8, title: "Gallery View 8" },
-    { type: "image", src: gallery9, title: "Gallery View 9" },
-    { type: "image", src: gallery10, title: "Gallery View 10" },
-    { type: "image", src: gallery11, title: "Gallery View 11" },
-    { type: "image", src: gallery12, title: "Gallery View 12" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-1_dazij3.jpg', title: "Gallery View 1" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-2_eyatol.jpg', title: "Gallery View 2" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-3_sgmmae', title: "Gallery View 3" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-4_gt5zex', title: "Gallery View 4" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-5_ce9ptf', title: "Gallery View 5" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-6_nnwurf', title: "Gallery View 6" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-7_c1szta', title: "Gallery View 7" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-8_equ1iq', title: "Gallery View 8" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-9_mpcqwy', title: "Gallery View 9" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-10_jl0aab', title: "Gallery View 10" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-11_msy53n', title: "Gallery View 11" },
+    { type: "image", src: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/gallery-12_kius8s', title: "Gallery View 12" },
   ], []);
 
   const nextSlide = useCallback(() => {
@@ -329,7 +298,7 @@ function Home() {
 
   const downloadPDF = useCallback((type: "brochure" | "pricing") => {
     const link = document.createElement("a");
-    link.href = type === "brochure" ? brochurePDF : pricePDF;
+    link.href = type === "brochure" ? "/brochure.pdf" : "/price_2025.pdf";
     link.download =
       type === "brochure"
         ? "SKA-Divine-Brochure.pdf"
@@ -444,7 +413,7 @@ function Home() {
             preload={heroVideoPreload}
             onError={heroVideoOptimization.handleVideoError}
           >
-            <source src={isMobile ? phoneBGVideo : skaIntroVideo} type="video/mp4" />
+            <source src={isMobile ? 'https://res.cloudinary.com/dwcjua3ud/video/upload/v1768897482/phoneBG_g2crw3.mp4' : 'https://res.cloudinary.com/dwcjua3ud/video/upload/v1768897731/skaIntro_the8kd.mp4'} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           {/* Gold particles effect */}
@@ -528,7 +497,7 @@ function Home() {
             <div className="space-y-10 md:space-y-14">
               {[
                 {
-                  image: info,
+                  image: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897297/info_qjjm0y.png',
                   items: [
                     {
                       title: "Residence Mix",
@@ -553,7 +522,7 @@ function Home() {
                   ],
                 },
                 {
-                  image: info2,
+                  image: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897286/about_mu6dn8.jpg',
                   items: [
                     {
                       title: "Lifestyle Volume",
@@ -877,19 +846,19 @@ function Home() {
                     type: "3 BHK + 3T",
                     area: "1855 sq.ft",
                     plan: "3 BHK + 3T Floor Plan",
-                    image: floorPlan1,
+                    image: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897402/1_wmdczf.png',
                   },
                   {
                     type: "3 BHK + 4T + S",
                     area: "2242 sq.ft",
                     plan: "3 BHK + 4T + S Floor Plan",
-                    image: floorPlan2,
+                    image: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897403/2_rij9ym.png',
                   },
                   {
                     type: "4 BHK + 5T + S",
                     area: "2962 sq.ft",
                     plan: "4 BHK + 5T + S Floor Plan",
-                    image: floorPlan3,
+                    image: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897403/3_cvdnlm.png',
                   },
                 ].map((plan, idx) => (
                   <div
@@ -925,10 +894,10 @@ function Home() {
                 <div className="bg-white rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(46,26,71,0.15)] border border-gold/30">
                   <div
                     className="w-full aspect-[4/3] bg-cream flex items-center justify-center cursor-pointer"
-                    onClick={() => setFullscreenImage(sitemap)}
+                    onClick={() => setFullscreenImage('https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897408/sitemap_c8jiq6.png')}
                   >
                     <img
-                      src={sitemap}
+                      src='https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897408/sitemap_c8jiq6.png'
                       alt="Site Map"
                       className="w-full h-full object-cover"
                     />
@@ -953,14 +922,14 @@ function Home() {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
               {[
-                { icon: amenity1, text: "Gym & Fitness" },
-                { icon: amenity2, text: "Swimming Pool" },
-                { icon: amenity3, text: "Clubhouse" },
-                { icon: amenity4, text: "Parking" },
-                { icon: amenity5, text: "Power Backup" },
-                { icon: amenity6, text: "24/7 Security" },
-                { icon: amenity7, text: "Landscaped Gardens" },
-                { icon: amenity8, text: "Sports Facilities" },
+                { icon: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897416/1_gwi7ia.png', text: "Gym & Fitness" },
+                { icon: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897417/2_ccakg2.png', text: "Swimming Pool" },
+                { icon: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897418/3_yzmxyj.png', text: "Clubhouse" },
+                { icon: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897419/4_zx0qsc.png', text: "Parking" },
+                { icon: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897420/5_izkp1g.png', text: "Power Backup" },
+                { icon: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897421/6_ox0jzc.png', text: "24/7 Security" },
+                { icon: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897422/7_vl8nrz.png', text: "Landscaped Gardens" },
+                { icon: 'https://res.cloudinary.com/dwcjua3ud/image/upload/v1768897423/8_z7zrdg.png', text: "Sports Facilities" },
               ].map((amenity, idx) => (
                 <div
                   key={idx}
@@ -1042,7 +1011,7 @@ function Home() {
                   preload="metadata"
                   onError={consVideoOptimization.handleVideoError}
                 >
-                  <source src={consUpdateVideo} type="video/mp4" />
+                  <source src='https://res.cloudinary.com/dwcjua3ud/video/upload/v1768897519/cons_update_drravs.mov' type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
