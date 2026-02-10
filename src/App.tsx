@@ -413,7 +413,7 @@ function Home() {
             preload={heroVideoPreload}
             onError={heroVideoOptimization.handleVideoError}
           >
-            <source src={isMobile ? 'https://res.cloudinary.com/dwcjua3ud/video/upload/v1768897482/phoneBG_g2crw3.mp4' : 'https://res.cloudinary.com/dwcjua3ud/video/upload/v1768897731/skaIntro_the8kd.mp4'} type="video/mp4" />
+            <source src={isMobile ? 'https://res.cloudinary.com/dwcjua3ud/video/upload/v1768897482/phoneBG_g2crw3.mp4' : 'https://res.cloudinary.com/dwcjua3ud/video/upload/v1770701181/new_bg_ska_t2vz0o.mp4'} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           {/* Gold particles effect */}
