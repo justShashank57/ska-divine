@@ -1011,7 +1011,7 @@ function Home() {
                   preload="metadata"
                   onError={consVideoOptimization.handleVideoError}
                 >
-                  <source src='https://res.cloudinary.com/dwcjua3ud/video/upload/v1768897519/cons_update_drravs.mov' type="video/mp4" />
+                  <source src='https://res.cloudinary.com/dwcjua3ud/video/upload/v1773394602/cu_2026_u7vwoo.mp4' type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
