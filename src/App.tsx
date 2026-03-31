@@ -22,9 +22,9 @@ function Home() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
   const [modalType, setModalType] = useState<"brochure" | "pricing" | null>(
-    null
+    "brochure"
   );
   const [isScrolled, setIsScrolled] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
